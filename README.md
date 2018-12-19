@@ -50,9 +50,8 @@ export class SignupComponent {
             filename: "test.pdf",
             base64Data: "...",
             contentType: "application/pdf",
-            size: 415564 // optional
         }).then(() => {
-            // go to backend
+            // do sth
         }).catch(reason => {
             console.error("File sharing failed", reason);
         });
@@ -85,7 +84,7 @@ No further config is needed.
 
 ## Platform: iOS
 
-On iOS the plugin is registered automatically by Capacitor.
+No further config is needed. On iOS the plugin is registered automatically by Capacitor.
 
 ## Platform: Electron
 
@@ -119,4 +118,14 @@ MIT. Please see [LICENSE](https://github.com/moberwasserlechner/capacitor-filesh
 ## BYTEOWLS Software & Consulting
 
 This plugin is powered by BYTEOWLS Software & Consulting and was build for [Team Conductor](https://team-conductor.com/en/) - Next generation club management platform.
+
+### Commerical support or consulting
+
+We create plugins for apps we build and share them as it is with the community.
+
+I you have a feature request or need a release breaking with our normal release cycle (time problem again)
+you have the possiblity to sponsor the development and get your requests done asap.
+
+See the wiki page for how to get a offer and a price for your custom development request.
+
 
