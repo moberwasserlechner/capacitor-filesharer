@@ -2,112 +2,110 @@ package com.byteowls.capacitor.filesharer;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import com.getcapacitor.JSObject;
+import android.util.Base64;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import org.json.JSONObject;
 
-@NativePlugin(name = "FileSharer")
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+@NativePlugin(requestCodes = { FileSharerPlugin.SEND_REQUEST_CODE }, name = "FileSharer")
 public class FileSharerPlugin extends Plugin {
+
+    static final int SEND_REQUEST_CODE = 2545;
+    private static final String PARAM_FILENAME = "filename";
+    private static final String PARAM_CONTENT_TYPE = "contentType";
+    private static final String PARAM_BASE64_DATA = "base64Data";
+    private static final String PARAM_ANDROID_CHOOSER = "android.titlechooser";
+    private static final String CAP_FILESHARER_TEMP = "cap_filesharer_temp";
+    private static final String FILE_PROVIDER_NAME = "com.byteowls.capacitor.filesharer.fileprovider";
 
     public FileSharerPlugin() {}
 
     @PluginMethod()
     public void share(final PluginCall call) {
-            String appId = getCallParam(String.class,call, PARAM_APP_ID);
-            String androidAppId = getCallParam(String.class, call, PARAM_ANDROID_APP_ID);
-            if (androidAppId != null && !androidAppId.isEmpty()) {
-                appId = androidAppId;
-            }
 
-            if (appId == null || appId.length() == 0) {
-                call.reject("Option '"+PARAM_APP_ID+"' or '"+PARAM_ANDROID_APP_ID+"' is required!");
-                return;
-            }
+        String filename = ConfigUtils.getCallParam(String.class, call, PARAM_FILENAME);
+        if (filename == null || filename.length() == 0) {
+            call.reject("Option '" + PARAM_FILENAME + "' is required!");
+            return;
+        }
 
-            String baseUrl = getCallParam(String.class, call, PARAM_AUTHORIZATION_BASE_URL);
-            if (baseUrl == null || baseUrl.length() == 0) {
-                call.reject("Option '"+PARAM_AUTHORIZATION_BASE_URL+"' is required!");
-                return;
-            }
-            String accessTokenEndpoint = getCallParam(String.class, call, PARAM_ACCESS_TOKEN_ENDPOINT); // placeholder
-            if (accessTokenEndpoint == null || accessTokenEndpoint.length() == 0) {
-                call.reject("Option '"+PARAM_ACCESS_TOKEN_ENDPOINT+"' is required!");
-                return;
-            }
-            String customScheme = getCallParam(String.class, call, PARAM_ANDROID_CUSTOM_SCHEME);
-            if (customScheme == null || customScheme.length() == 0) {
-                call.reject("Option '"+ PARAM_ANDROID_CUSTOM_SCHEME +"' is required!");
-                return;
-            }
+        String contentType = ConfigUtils.getCallParam(String.class, call, PARAM_CONTENT_TYPE);
+        if (contentType == null || contentType.length() == 0) {
+            call.reject("Option '" + PARAM_CONTENT_TYPE + "' is required!");
+            return;
+        }
 
-            String responseType = getCallParam(String.class, call, PARAM_RESPONSE_TYPE);
-            String androidResponseType = getCallParam(String.class, call, PARAM_ANDROID_RESPONSE_TYPE);
-            if (androidResponseType != null && !androidResponseType.isEmpty()) {
-                responseType = androidResponseType;
-            }
+        String base64Data = ConfigUtils.getCallParam(String.class, call, PARAM_BASE64_DATA);
+        if (base64Data == null || base64Data.length() == 0) {
+            call.reject("Option '" + PARAM_BASE64_DATA + "' is required!");
+            return;
+        }
 
-    }
+        String chooserTitle = ConfigUtils.getCallParam(String.class, call, PARAM_ANDROID_CHOOSER);
 
-    private <T> T getCallParam(Class<T> clazz, PluginCall call, String key) {
-        return getCallParam(clazz, call, key, null);
-    }
+        saveCall(call);
 
-    private <T> T getCallParam(Class<T> clazz, PluginCall call, String key, T defaultValue) {
-        String k = getDeepestKey(key);
+        // save cachedFile to cache dir
         try {
-            JSONObject o = getDeepestObject(call.getData(), key);
-
-            Object value = null;
-            if (clazz.isAssignableFrom(String.class)) {
-                value = o.getString(k);
-            } else if (clazz.isAssignableFrom(Boolean.class)) {
-                value = o.getBoolean(k);
-            } else if (clazz.isAssignableFrom(Double.class)) {
-                value = o.getDouble(k);
-            } else if (clazz.isAssignableFrom(Integer.class)) {
-                value = o.getInt(k);
-            } else if (clazz.isAssignableFrom(Float.class)) {
-                Double doubleValue = o.getDouble(k);
-                value = doubleValue.floatValue();
-            } else if (clazz.isAssignableFrom(Integer.class)) {
-                value = o.getInt(k);
+            File cachedFile = File.createTempFile(filename, null, getCacheDir());
+            try (FileOutputStream fos = new FileOutputStream(cachedFile)) {
+                byte[] decodedData = Base64.decode(base64Data, Base64.DEFAULT);
+                fos.write(decodedData);
+                fos.flush();
             }
-            if (value == null) {
-                return defaultValue;
+
+            // create a send intent
+
+            final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+
+            Uri fileUri = FileProvider.getUriForFile(getContext(),
+                FILE_PROVIDER_NAME,
+                cachedFile);
+            sendIntent.setDataAndType(fileUri, contentType);
+//            sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            startActivityForResult(call, Intent.createChooser(sendIntent, chooserTitle), SEND_REQUEST_CODE);
+//            if (sendIntent.resolveActivity(getContext().getPackageManager()) != null) {
+//            } else {
+//                Log.e(getLogTag(), "@byteowls/capacitor-filesharer: No app for " + sendIntent.getAction());
+//                call.reject("NO_FILE_APP_FOUND");
+//            }
+
+        } catch (IOException e) {
+            // Error while creating cachedFile
+            call.reject("ERR_CACHED_FILE_NOT_CREATED");
+        }
+    }
+
+    private File getCacheDir() {
+        File cacheDir = new File(getContext().getCacheDir(), CAP_FILESHARER_TEMP);
+        if (!cacheDir.exists()) {
+            //noinspection ResultOfMethodCallIgnored
+            cacheDir.mkdirs();
+        } else {
+            for (File f : cacheDir.listFiles()) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
             }
-            return (T) value;
-        } catch (Exception ignore) {}
-        return defaultValue;
-    }
-
-    private String getDeepestKey(String key) {
-        String[] parts = key.split("\\.");
-        if (parts.length > 0) {
-            return parts[parts.length - 1];
         }
-        return null;
+        return cacheDir;
     }
 
-    private JSObject getDeepestObject(JSObject o, String key) {
-        // Split on periods
-        String[] parts = key.split("\\.");
-        // Search until the second to last part of the key
-        for (int i = 0; i < parts.length-1; i++) {
-            String k = parts[i];
-            o = o.getJSObject(k);
-        }
-        return o;
-    }
-
-    public void discardAuthState() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            getContext().deleteSharedPreferences(getLogTag());
+    @Override
+    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
+        super.handleOnActivityResult(requestCode, resultCode, data);
+        if (requestCode == SEND_REQUEST_CODE) {
+            PluginCall call = getSavedCall();
+            call.resolve();
         }
     }
 

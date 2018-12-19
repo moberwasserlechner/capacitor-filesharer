@@ -21,9 +21,6 @@ export interface ShareFileOptions {
 
     base64Data: string;
 
-    size?: number;
-
-
     /**
      * Custom options for the platform "web"
      */
@@ -34,7 +31,7 @@ export interface ShareFileOptions {
      * Custom options for the platform "android"
      */
     android?: {
-
+        chooserTitle: string; // Override the default share sheet title
     },
     /**
      * Custom options for the platform "ios"
