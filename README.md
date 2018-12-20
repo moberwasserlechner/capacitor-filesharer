@@ -121,10 +121,10 @@ This plugin is powered by BYTEOWLS Software & Consulting and was build for [Team
 
 ### Commerical support or consulting
 
-We create plugins for apps we build and share them as it is with the community.
+We create plugins for apps we build and share them **as it is** with the community.
 
-I you have a feature request or need a release breaking with our normal release cycle (time problem again)
-you have the possiblity to sponsor the development and get your requests done asap.
+I you have a feature request or need a release breaking with our normal release cycle
+you have the possiblity to sponsor the development paying for custom development or support.
 
 See the wiki page for how to get a offer and a price for your custom development request.
 
