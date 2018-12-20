@@ -3,6 +3,7 @@ package com.byteowls.capacitor.filesharer;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Base64;
+import android.util.Log;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -20,7 +21,7 @@ public class FileSharerPlugin extends Plugin {
     private static final String PARAM_CONTENT_TYPE = "contentType";
     private static final String PARAM_BASE64_DATA = "base64Data";
     private static final String PARAM_ANDROID_CHOOSER = "android.titlechooser";
-    private static final String CAP_FILESHARER_TEMP = "cap_filesharer_temp";
+    private static final String CAP_FILESHARER_TEMP = "capfilesharer";
     private static final String FILE_PROVIDER_NAME = "com.byteowls.capacitor.filesharer.fileprovider";
 
     public FileSharerPlugin() {}
@@ -51,43 +52,33 @@ public class FileSharerPlugin extends Plugin {
         saveCall(call);
 
         // save cachedFile to cache dir
-        try {
-            File cachedFile = File.createTempFile(filename, null, getCacheDir());
-            try (FileOutputStream fos = new FileOutputStream(cachedFile)) {
-                byte[] decodedData = Base64.decode(base64Data, Base64.DEFAULT);
-                fos.write(decodedData);
-                fos.flush();
-            }
-
-            // create a send intent
-
-            final Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-
-            Uri fileUri = FileProvider.getUriForFile(getContext(),
-                FILE_PROVIDER_NAME,
-                cachedFile);
-            sendIntent.setDataAndType(fileUri, contentType);
-//            sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
-
-            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            startActivityForResult(call, Intent.createChooser(sendIntent, chooserTitle), SEND_REQUEST_CODE);
-//            if (sendIntent.resolveActivity(getContext().getPackageManager()) != null) {
-//            } else {
-//                Log.e(getLogTag(), "@byteowls/capacitor-filesharer: No app for " + sendIntent.getAction());
-//                call.reject("NO_FILE_APP_FOUND");
-//            }
-
+        File cachedFile = new File(getCacheDir(), filename);
+        try (FileOutputStream fos = new FileOutputStream(cachedFile)) {
+            byte[] decodedData = Base64.decode(base64Data, Base64.DEFAULT);
+            fos.write(decodedData);
+            fos.flush();
         } catch (IOException e) {
-            // Error while creating cachedFile
-            call.reject("ERR_CACHED_FILE_NOT_CREATED");
+            Log.e(getLogTag(), "", e);
+            call.reject("ERR_FILE_NOT_CACHED");
+            return;
         }
+
+        // create a send intent
+
+        final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+
+        Uri contentUri = FileProvider.getUriForFile(getActivity().getApplicationContext(), FILE_PROVIDER_NAME, cachedFile);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+        sendIntent.setTypeAndNormalize(contentType);
+        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityForResult(call, Intent.createChooser(sendIntent, chooserTitle), SEND_REQUEST_CODE);
     }
 
     private File getCacheDir() {
-        File cacheDir = new File(getContext().getCacheDir(), CAP_FILESHARER_TEMP);
+        File cacheDir = new File(getContext().getFilesDir(), CAP_FILESHARER_TEMP);
         if (!cacheDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             cacheDir.mkdirs();
