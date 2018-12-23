@@ -5,6 +5,14 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/michaelowl_web.svg?style=social&label=Follow&style=flat-square)](https://twitter.com/michaelowl_web)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/moberwasserlechner)
 
+## Attention: This project is an ALPHA
+
+This library is about to be changed through development as I need it.
+
+If you use a working version do not automatically update your dependencies.
+ 
+I will NOT announce any changes until the first beta is released.
+
 ## Installation
 
 `npm i @byteowls/capacitor-filesharer`
@@ -119,13 +127,12 @@ MIT. Please see [LICENSE](https://github.com/moberwasserlechner/capacitor-filesh
 
 This plugin is powered by BYTEOWLS Software & Consulting and was build for [Team Conductor](https://team-conductor.com/en/) - Next generation club management platform.
 
-### Commerical support or consulting
+### Commercial support and consulting
 
 We create plugins for apps we build and share them **as it is** with the community.
 
-I you have a feature request or need a release breaking with our normal release cycle
-you have the possiblity to sponsor the development paying for custom development or support.
+I you have a feature request, need support how to using the plugin or 
+need a release breaking with our normal release cycle you have the possibility 
+to sponsor the development by paying for this custom development or support.
 
-See the wiki page for how to get a offer and a price for your custom development request.
-
-
+See the wiki page for how to request a quote.
