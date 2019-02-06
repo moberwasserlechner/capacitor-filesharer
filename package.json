@@ -11,8 +11,9 @@
         "build": "npm run clean && tsc",
         "clean": "rm -rf ./dist",
         "watch": "tsc --watch",
-        "prepublishOnly": "npm run build",
-        "publishLocal": "npm run build && npm pack"
+        "removePacked": "rm -f byteowls-capacitor-filesharer-*.tgz",
+        "publishLocally": "npm run removePacked && npm run build && npm pack",
+        "prepublishOnly": "npm run build"
     },
     "files": [
         "dist/",
