@@ -17,38 +17,45 @@ import java.io.IOException;
 public class FileSharerPlugin extends Plugin {
 
     static final int SEND_REQUEST_CODE = 2545;
+
+    private static final String CAP_FILESHARER_TEMP = "capfilesharer";
+    private static final String FILE_PROVIDER_NAME = "com.byteowls.capacitor.filesharer.fileprovider";
+
     private static final String PARAM_FILENAME = "filename";
     private static final String PARAM_CONTENT_TYPE = "contentType";
     private static final String PARAM_BASE64_DATA = "base64Data";
     private static final String PARAM_ANDROID_CHOOSER = "android.titlechooser";
-    private static final String CAP_FILESHARER_TEMP = "capfilesharer";
-    private static final String FILE_PROVIDER_NAME = "com.byteowls.capacitor.filesharer.fileprovider";
+
+    private static final String ERR_PARAM_NO_FILENAME = "ERR_PARAM_NO_FILENAME";
+    private static final String ERR_PARAM_NO_CONTENT_TYPE = "ERR_PARAM_NO_CONTENT_TYPE";
+    private static final String ERR_PARAM_NO_DATA = "ERR_PARAM_NO_DATA";
+    private static final String ERR_FILE_CACHING_FAILED = "ERR_FILE_CACHING_FAILED";
+    private static final String ERR_PARAM_DATA_INVALID = "ERR_PARAM_DATA_INVALID";
 
     public FileSharerPlugin() {}
 
+    @SuppressWarnings("Duplicates")
     @PluginMethod()
     public void share(final PluginCall call) {
-
         String filename = ConfigUtils.getCallParam(String.class, call, PARAM_FILENAME);
         if (filename == null || filename.length() == 0) {
-            call.reject("Option '" + PARAM_FILENAME + "' is required!");
+            call.reject(ERR_PARAM_NO_FILENAME);
             return;
         }
 
         String contentType = ConfigUtils.getCallParam(String.class, call, PARAM_CONTENT_TYPE);
         if (contentType == null || contentType.length() == 0) {
-            call.reject("Option '" + PARAM_CONTENT_TYPE + "' is required!");
+            call.reject(ERR_PARAM_NO_CONTENT_TYPE);
             return;
         }
 
         String base64Data = ConfigUtils.getCallParam(String.class, call, PARAM_BASE64_DATA);
         if (base64Data == null || base64Data.length() == 0) {
-            call.reject("Option '" + PARAM_BASE64_DATA + "' is required!");
+            call.reject(ERR_PARAM_NO_DATA);
             return;
         }
 
         String chooserTitle = ConfigUtils.getCallParam(String.class, call, PARAM_ANDROID_CHOOSER);
-
         saveCall(call);
 
         // save cachedFile to cache dir
@@ -58,8 +65,11 @@ public class FileSharerPlugin extends Plugin {
             fos.write(decodedData);
             fos.flush();
         } catch (IOException e) {
-            Log.e(getLogTag(), "", e);
-            call.reject("ERR_FILE_NOT_CACHED");
+            Log.e(getLogTag(), e.getMessage());
+            call.reject(ERR_FILE_CACHING_FAILED);
+            return;
+        } catch (IllegalArgumentException e) {
+            call.reject(ERR_PARAM_DATA_INVALID);
             return;
         }
 

@@ -6,7 +6,7 @@ declare global {
 
 export interface FileSharerPlugin {
     /**
-     *
+     * Share a file using the native share dialog on Android and iOS and download the file on Web.
      * @param {ShareFileOptions} options
      * @returns {Promise<void>}
      */
@@ -14,29 +14,25 @@ export interface FileSharerPlugin {
 }
 
 export interface ShareFileOptions {
-
-    filename: string;
-
-    contentType: string;
-
-    base64Data: string;
-
     /**
-     * Custom options for the platform "web"
+     * The filename with a extension.
      */
-    web?: {
-
-    },
+    filename: string;
+    /**
+     * The base64 encoded data.
+     */
+    base64Data: string;
+    /**
+     * The content type of the provided data.
+     */
+    contentType: string;
     /**
      * Custom options for the platform "android"
      */
     android?: {
-        chooserTitle: string; // Override the default share sheet title
-    },
-    /**
-     * Custom options for the platform "ios"
-     */
-    ios?: {
-
+        /**
+         * Override the default share sheet title
+         */
+        chooserTitle: string;
     }
 }
