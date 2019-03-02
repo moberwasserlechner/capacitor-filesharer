@@ -1,6 +1,6 @@
 {
     "name": "@byteowls/capacitor-filesharer",
-    "version": "1.0.0-alpha.5",
+    "version": "1.0.0-beta.1",
     "description": "Capacitor plugin to download and share files for the Web, Android and iOS",
     "author": "Michael Oberwasserlechner",
     "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",
@@ -11,8 +11,9 @@
         "build": "npm run clean && tsc",
         "clean": "rm -rf ./dist",
         "watch": "tsc --watch",
-        "prepublishOnly": "npm run build",
-        "publishLocal": "npm run build && npm pack"
+        "removePacked": "rm -f byteowls-capacitor-filesharer-*.tgz",
+        "publishLocally": "npm run removePacked && npm run build && npm pack",
+        "prepublishOnly": "npm run build"
     },
     "files": [
         "dist/",
@@ -49,7 +50,7 @@
         "@capacitor/core": "^1.0.0-beta.11"
     },
     "dependencies": {
-        "file-saver": "^2.0.0"
+        "file-saver": "^2.0.1"
     },
     "devDependencies": {
         "@capacitor/core": "1.0.0-beta.17",
