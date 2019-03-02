@@ -62,9 +62,11 @@ export class SignupComponent {
 
 ### Error Codes
 
-* ERR_PARAM_FILENAME ... Filename missing or invalid.
-* ERR_PARAM_DATA ... Base64 data missing.
-* ERR_PARAM_CONTENTTYPE ... Content type missing
+* ERR_PARAM_NO_FILENAME ... Filename missing or invalid.
+* ERR_PARAM_NO_DATA ... Base64 data missing.
+* ERR_PARAM_NO_CONTENT_TYPE ... Content type missing
+* ERR_PARAM_DATA_INVALID ... Base64 data is invalid.
+* ERR_FILE_CACHING_FAILED ... Caching the file in temp directory on the device failed.
 
 ## Platform: Web/PWA
 
