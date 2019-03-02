@@ -5,13 +5,6 @@
 [![Twitter Follow](https://img.shields.io/twitter/follow/michaelowl_web.svg?style=social&label=Follow&style=flat-square)](https://twitter.com/michaelowl_web)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/moberwasserlechner)
 
-## Attention: This project is an ALPHA
-
-This library is about to be changed through development as I need it.
-
-If you use a working version do not automatically update your dependencies.
- 
-I will NOT announce any changes until the first beta is released.
 
 ## Installation
 
@@ -60,12 +53,20 @@ export class SignupComponent {
             contentType: "application/pdf",
         }).then(() => {
             // do sth
-        }).catch(reason => {
-            console.error("File sharing failed", reason);
+        }).catch(error => {
+            console.error("File sharing failed", error.message);
         });
     }
 }
 ```
+
+### Error Codes
+
+* ERR_PARAM_NO_FILENAME ... Filename missing or invalid.
+* ERR_PARAM_NO_DATA ... Base64 data missing.
+* ERR_PARAM_NO_CONTENT_TYPE ... Content type missing
+* ERR_PARAM_DATA_INVALID ... Base64 data is invalid.
+* ERR_FILE_CACHING_FAILED ... Caching the file in temp directory on the device failed.
 
 ## Platform: Web/PWA
 
@@ -96,7 +97,7 @@ No further config is needed. On iOS the plugin is registered automatically by Ca
 
 ## Platform: Electron
 
-- Maybe early 2019
+- Maybe mid 2019
 
 ## Contribute
 
@@ -125,7 +126,7 @@ MIT. Please see [LICENSE](https://github.com/moberwasserlechner/capacitor-filesh
 
 ## BYTEOWLS Software & Consulting
 
-This plugin is powered by BYTEOWLS Software & Consulting and was build for [Team Conductor](https://team-conductor.com/en/) - Next generation club management platform.
+This plugin is powered by [BYTEOWLS Software & Consulting](https://byteowls.com) and was build for [Team Conductor](https://team-conductor.com/en/) - Next generation club management platform.
 
 ### Commercial support and consulting
 
