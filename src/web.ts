@@ -36,5 +36,6 @@ const FileSharer = new FileSharerPluginWeb();
 
 export { FileSharer };
 
+// this does not work for angular. You need to register the plugin in app.component.ts again.
 import { registerWebPlugin } from '@capacitor/core';
 registerWebPlugin(FileSharer);
