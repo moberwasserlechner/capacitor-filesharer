@@ -3,8 +3,8 @@
 
     <application>
         <provider
-            android:name="com.byteowls.capacitor.filesharer.FileProvider"
-            android:authorities="com.byteowls.capacitor.filesharer.fileprovider"
+            android:name="com.byteowls.capacitor.filesharer.FileSharerProvider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

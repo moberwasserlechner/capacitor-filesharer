@@ -65,7 +65,7 @@ export class SignupComponent {
 * ERR_PARAM_NO_FILENAME ... Filename missing or invalid.
 * ERR_PARAM_NO_DATA ... Base64 data missing.
 * ERR_PARAM_NO_CONTENT_TYPE ... Content type missing
-* ERR_PARAM_DATA_INVALID ... Base64 data is invalid.
+* ERR_PARAM_DATA_INVALID ... Base64 data is invalid. See [this comment](https://github.com/moberwasserlechner/capacitor-filesharer/issues/5#issuecomment-502070959) for a possible error.
 * ERR_FILE_CACHING_FAILED ... Caching the file in temp directory on the device failed.
 
 ## Platform: Web/PWA

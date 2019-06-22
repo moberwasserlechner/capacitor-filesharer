@@ -6,7 +6,6 @@ target 'ByteowlsCapacitorFilesharer' do
   use_frameworks!
 
   # Pods for ByteowlsCapacitorFilesharer
-
-   pod 'Capacitor', '~> 1.0.0-beta.16'
+  pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
 
 end

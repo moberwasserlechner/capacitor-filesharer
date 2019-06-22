@@ -77,7 +77,7 @@ public class FileSharerPlugin extends Plugin {
 
         final Intent sendIntent = new Intent(Intent.ACTION_SEND);
 
-        Uri contentUri = FileProvider.getUriForFile(getActivity().getApplicationContext(), FILE_PROVIDER_NAME, cachedFile);
+        Uri contentUri = FileSharerProvider.getUriForFile(getContext(), FILE_PROVIDER_NAME, cachedFile);
         sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         sendIntent.setTypeAndNormalize(contentType);
         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

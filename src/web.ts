@@ -35,3 +35,6 @@ export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
 const FileSharer = new FileSharerPluginWeb();
 
 export { FileSharer };
+
+import { registerWebPlugin } from '@capacitor/core';
+registerWebPlugin(FileSharer);
