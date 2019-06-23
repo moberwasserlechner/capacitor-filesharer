@@ -25,6 +25,9 @@ public class FileSharerPlugin: CAPPlugin {
             
             let activityVC = UIActivityViewController(activityItems: [tmpUrl], applicationActivities: nil)
             DispatchQueue.main.async {
+                if let popOver = activityVC.popoverPresentationController {
+                    popOver.sourceView = self.bridge.viewController.view
+                }
                 self.bridge.viewController.present(activityVC, animated: true, completion: {
                     call.resolve()
                 })

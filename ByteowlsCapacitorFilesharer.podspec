@@ -11,7 +11,7 @@ require 'json'
     s.homepage = package['homepage']
     s.author = package['author']
     s.ios.deployment_target  = '11.0'
-    s.dependency 'Capacitor', '~> 1.0.0-beta.16'
+    s.dependency 'Capacitor'
     s.source = { :git => 'https://github.com/moberwasserlechner/capacitor-filesharer', :tag => s.version.to_s }
     s.source_files = 'ios/ByteowlsCapacitorFilesharer/Source/*.{swift,h,m}'
     s.swift_version = '4.2'
