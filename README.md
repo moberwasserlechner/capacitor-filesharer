@@ -10,6 +10,8 @@
 
 `npm i @byteowls/capacitor-filesharer`
 
+Minimum Capacitor version is **1.0.0**
+
 ## Configuration
 
 This example shows the common process of configuring this plugin.
@@ -34,6 +36,8 @@ export class AppComponent implements OnInit {
     }
 }
 ```
+
+This is a workaround because the plugin registers itself but that did not work for Angular.
 
 ### Use it
 
