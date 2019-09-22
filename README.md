@@ -95,6 +95,16 @@ No further config is needed.
     }
 ```
 
+Override the onSaveInstanceState on the main activity to avoid an issue that results in !!! FAILED BINDER TRANSACTION !!! errors when dealing with larger files ([Related issue](https://github.com/moberwasserlechner/capacitor-filesharer/issues/13))
+
+```
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.clear();
+  }
+```
+
 ## Platform: iOS
 
 No further config is needed. On iOS the plugin is registered automatically by Capacitor.
