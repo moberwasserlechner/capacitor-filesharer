@@ -81,6 +81,9 @@ No further config is needed.
 **Register the plugin** in `com.companyname.appname.MainActivity#onCreate`
 
 ```
+import com.byteowls.capacitor.filesharer.FileSharerPlugin;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
