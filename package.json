@@ -1,6 +1,6 @@
 {
     "name": "@byteowls/capacitor-filesharer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Capacitor plugin to download and share files for the Web, Android and iOS",
     "author": "Michael Oberwasserlechner",
     "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",

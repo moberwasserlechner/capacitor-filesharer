@@ -19,7 +19,7 @@ public class FileSharerPlugin extends Plugin {
     static final int SEND_REQUEST_CODE = 2545;
 
     private static final String CAP_FILESHARER_TEMP = "capfilesharer";
-    private static final String FILE_PROVIDER_NAME = "com.byteowls.capacitor.filesharer.fileprovider";
+    private String FILE_PROVIDER_NAME;
 
     private static final String PARAM_FILENAME = "filename";
     private static final String PARAM_CONTENT_TYPE = "contentType";
@@ -37,6 +37,8 @@ public class FileSharerPlugin extends Plugin {
     @SuppressWarnings("Duplicates")
     @PluginMethod()
     public void share(final PluginCall call) {
+        this.FILE_PROVIDER_NAME = getContext().getPackageName() + ".filesharer.fileprovider";
+
         String filename = ConfigUtils.getCallParam(String.class, call, PARAM_FILENAME);
         if (filename == null || filename.length() == 0) {
             call.reject(ERR_PARAM_NO_FILENAME);
