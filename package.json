@@ -53,9 +53,9 @@
         "file-saver": "^2.0.2"
     },
     "devDependencies": {
-        "@capacitor/core": "1.1.0",
-        "@capacitor/ios": "1.1.0",
-        "@capacitor/android": "1.1.0",
+        "@capacitor/core": "1.5.0",
+        "@capacitor/ios": "1.5.0",
+        "@capacitor/android": "1.5.0",
         "typescript": "3.2.4",
         "@types/file-saver": "2.0.1"
     }
