@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2020-04-10
+
+### Fixed
+- iPad on iOS 13.3+ does not work. closes #16. thx [@nikosdouvlis](https://github.com/nikosdouvlis)
+
+### Breaking
+- Capacitor 2.x is new minimum peer dependency. closes #19
+
 ## [1.0.1] - 2020-03-04
 
 ### Added
@@ -37,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share files using the native share dialog on Android and iOS
 - Download files on the Web
 
-[Unreleased]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/1.0.1...master
+[Unreleased]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/2.0.0...master
+[2.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/1.0.1...2.0.0
 [1.0.1]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/1.0.0-beta.1...1.0.0
 [1.0.0-beta.1]: https://github.com/moberwasserlechner/capacitor-filesharer/releases/tag/1.0.0-beta.1

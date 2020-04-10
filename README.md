@@ -10,7 +10,7 @@
 
 `npm i @byteowls/capacitor-filesharer`
 
-Minimum Capacitor version is **1.0.0**
+Minimum Capacitor version is **2.0.0**
 
 ## Configuration
 
@@ -114,7 +114,7 @@ No further config is needed. On iOS the plugin is registered automatically by Ca
 
 ## Platform: Electron
 
-- Maybe mid 2019
+- No timeline.
 
 ## Contribute
 
@@ -152,8 +152,8 @@ This plugin is powered by [BYTEOWLS Software & Consulting](https://byteowls.com)
 
 We create plugins for apps we build and share them **as it is** with the community.
 
-I you have a feature request, need support how to using the plugin or 
-need a release breaking with our normal release cycle you have the possibility 
+I you have a feature request, need support how to using the plugin or
+need a release breaking with our normal release cycle you have the possibility
 to sponsor the development by paying for this custom development or support.
 
 See the wiki page for how to request a quote.

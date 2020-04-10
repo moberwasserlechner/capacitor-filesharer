@@ -19,7 +19,6 @@ public class FileSharerPlugin extends Plugin {
     static final int SEND_REQUEST_CODE = 2545;
 
     private static final String CAP_FILESHARER_TEMP = "capfilesharer";
-    private String FILE_PROVIDER_NAME;
 
     private static final String PARAM_FILENAME = "filename";
     private static final String PARAM_CONTENT_TYPE = "contentType";
@@ -37,7 +36,7 @@ public class FileSharerPlugin extends Plugin {
     @SuppressWarnings("Duplicates")
     @PluginMethod()
     public void share(final PluginCall call) {
-        this.FILE_PROVIDER_NAME = getContext().getPackageName() + ".filesharer.fileprovider";
+        String fileProviderName = getContext().getPackageName() + ".filesharer.fileprovider";
 
         String filename = ConfigUtils.getCallParam(String.class, call, PARAM_FILENAME);
         if (filename == null || filename.length() == 0) {
@@ -79,7 +78,7 @@ public class FileSharerPlugin extends Plugin {
 
         final Intent sendIntent = new Intent(Intent.ACTION_SEND);
 
-        Uri contentUri = FileSharerProvider.getUriForFile(getContext(), FILE_PROVIDER_NAME, cachedFile);
+        Uri contentUri = FileSharerProvider.getUriForFile(getContext(), fileProviderName, cachedFile);
         sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         sendIntent.setTypeAndNormalize(contentType);
         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
