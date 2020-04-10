@@ -21,10 +21,9 @@ Replace this with the commands output
 ```
 
 ### Library version:
-<!-- Please select the chosen version by making it **bold** -->
+<!-- Please remove all items that are not relevant. -->
 
-- **2.0.0**
-- 1.1.0
+- 2.0.0
 - 1.0.1
 - 1.0.0
 - other: (Please fill in the version you are using.)
@@ -39,7 +38,7 @@ Replace this with the commands output
 ```
 
 ## Affected Platform(s):
-<!-- Please select the chosen platforms by making them **bold** -->
+<!-- Please remove all items that are not relevant. -->
 
 - Android
 - iOS
