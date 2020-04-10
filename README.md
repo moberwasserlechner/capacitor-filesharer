@@ -114,7 +114,7 @@ No further config is needed. On iOS the plugin is registered automatically by Ca
 
 ## Platform: Electron
 
-- Maybe mid 2019
+- No timeline.
 
 ## Contribute
 

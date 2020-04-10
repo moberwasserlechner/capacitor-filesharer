@@ -6,13 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2020-04-10
+
 ### Fixed
-- iPad on iOS 13.3+ does not work
+- iPad on iOS 13.3+ does not work. closes #16. thx [@nikosdouvlis](https://github.com/nikosdouvlis)
 
 ### Breaking
-- Capacitor 2.x is new minimum peer dependency
-- Android
- - Migrate to AndroidX
+- Capacitor 2.x is new minimum peer dependency. closes #19
 
 ## [1.0.1] - 2020-03-04
 
