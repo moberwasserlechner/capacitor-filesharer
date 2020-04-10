@@ -1,37 +1,33 @@
 ---
 name: Bug Report
 about: Template to report bugs.
-title: 'bug: '
+title: 'Bug: '
 labels: ''
 assignees: ''
 
 ---
 
 ## Bug Report
-<!-- NOTE: Leave these checkboxes EMPTY until after the issue is created. Once the issue is created, check one or more boxes in the below sections. -->
 
 
 ### Capacitor version:
-<!-- Provide the version of Capacitor and related installed dependencies. You can use `npx cap doctor` for the output from the root directory of your project. -->
+<!-- Provide the version of Capacitor and related installed dependencies. 
+You can use `npx cap doctor` for the output from the root directory of your project. -->
 
-- [ ] 2.0.0
-- [ ] 1.5.2
-- [ ] 1.5.1
-- [ ] 1.5.0
-- [ ] other: (Please fill in the version you are using.)
-
-`npx cap doctor`:
+Run `npx cap doctor`:
 
 ```
 Replace this with the commands output
 ```
 
 ### Library version:
+<!-- Please select the chosen version by making it **bold** -->
 
-- [ ] 2.0.0
-- [ ] 1.0.1
-- [ ] 1.0.0
-- [ ] other: (Please fill in the version you are using.)
+- **2.0.0**
+- 1.1.0
+- 1.0.1
+- 1.0.0
+- other: (Please fill in the version you are using.)
 
 ## Your Plugin Configuration
 <!-- Without secret stuff (of course). -->
@@ -43,11 +39,11 @@ Replace this with the commands output
 ```
 
 ## Affected Platform(s):
+<!-- Please select the chosen platforms by making them **bold** -->
 
-- [ ] Android
-- [ ] iOS
-- [ ] Electron
-- [ ] Web
+- Android
+- iOS
+- Web
 
 ## Current Behavior
 <!-- Describe the bug. Be specific. I need to understand you problem. -->
@@ -67,4 +63,3 @@ Replace this with the commands output
 
 ## Other Information
 <!-- List any other information that is relevant to your issue. Stack traces, related issues, suggestions on how to fix, Stack Overflow links, forum links, etc. -->
-
