@@ -1,6 +1,6 @@
 {
     "name": "@byteowls/capacitor-filesharer",
-    "version": "2.0.0",
+    "version": "3.0.0",
     "description": "Capacitor plugin to download and share files for the Web, Android and iOS",
     "author": "Michael Oberwasserlechner",
     "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",
@@ -9,9 +9,9 @@
     "types": "dist/esm/index.d.ts",
     "scripts": {
         "build": "npm run clean && tsc",
-        "clean": "rm -rf ./dist",
+        "clean": "rimraf ./dist",
         "watch": "tsc --watch",
-        "removePacked": "rm -f byteowls-capacitor-filesharer-*.tgz",
+        "removePacked": "rimraf byteowls-capacitor-filesharer-*.tgz",
         "publishLocally": "npm run removePacked && npm run build && npm pack",
         "prepublishOnly": "npm run build"
     },
@@ -47,16 +47,17 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@capacitor/core": "^2.0.0"
+        "@capacitor/core": "^3.0.0"
     },
     "dependencies": {
         "file-saver": "^2.0.2"
     },
     "devDependencies": {
-        "@capacitor/core": "2.0.0",
-        "@capacitor/ios": "2.0.0",
-        "@capacitor/android": "2.0.0",
-        "typescript": "^3.5.3",
-        "@types/file-saver": "2.0.1"
+        "@capacitor/android": "3.0.0",
+        "@capacitor/core": "3.0.0",
+        "@capacitor/ios": "3.0.0",
+        "@types/file-saver": "2.0.1",
+        "rimraf": "^3.0.2",
+        "typescript": "^3.5.3"
     }
 }
