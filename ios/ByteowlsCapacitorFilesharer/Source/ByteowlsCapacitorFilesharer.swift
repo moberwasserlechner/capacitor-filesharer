@@ -56,40 +56,36 @@ public class FileSharerPlugin: CAPPlugin {
     }
 
     @objc func shareMultiple(_ call: CAPPluginCall) {
-        guard let filenameArray = call.getArray("filenameArray") else {
+        guard let filenameArray = call.getArray("filenameArray", String.self) else {
             call.reject(self.ERR_PARAM_NO_FILENAME)
             return
         }
-        guard let base64DataArray = call.getArray("base64DataArray") else {
+        guard let base64DataArray = call.getArray("base64DataArray", String.self) else {
             call.reject(self.ERR_PARAM_NO_DATA)
             return
         }
 
-        let tmpUrls = []
-        let dataObjects = []
+        var tmpUrls: [URL] = []
+        var dataObjects: [Data] = []
 
         // TODO check is it possible to get array of objects
         // TODO check is two array in same length
 
         for (index,data) in base64DataArray.enumerated() {
-            let tmpUrl = FileManager.default.temporaryDirectory.appendingPathComponent(filenameArray[index])
+            let tmpUrl:URL = FileManager.default.temporaryDirectory.appendingPathComponent(filenameArray[index])
 
-            guard let dataObj = Data(base64Encoded: base64Data) else {
+            guard let dataObj = Data(base64Encoded: data) else {
                 call.reject(self.ERR_PARAM_DATA_INVALID)
                 return
             }
-
-
 
             tmpUrls.append(tmpUrl)
             dataObjects.append(dataObj)
         }
 
-
-
         do {
             for (index,dataObject) in dataObjects.enumerated() {
-                try dataObj.write(to: tmpUrls[index])
+                try dataObject.write(to: tmpUrls[index])
             }
 
             DispatchQueue.main.async {
