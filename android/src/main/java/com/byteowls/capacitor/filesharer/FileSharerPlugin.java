@@ -1,22 +1,23 @@
 package com.byteowls.capacitor.filesharer;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityCallback;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-@NativePlugin(requestCodes = { FileSharerPlugin.SEND_REQUEST_CODE }, name = "FileSharer")
+@CapacitorPlugin(name = "FileSharer")
 public class FileSharerPlugin extends Plugin {
-
-    static final int SEND_REQUEST_CODE = 2545;
 
     private static final String CAP_FILESHARER_TEMP = "capfilesharer";
 
@@ -85,7 +86,7 @@ public class FileSharerPlugin extends Plugin {
         sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivityForResult(call, Intent.createChooser(sendIntent, chooserTitle), SEND_REQUEST_CODE);
+        startActivityForResult(call, Intent.createChooser(sendIntent, chooserTitle), "callbackComplete");
     }
 
     private File getCacheDir() {
@@ -102,13 +103,13 @@ public class FileSharerPlugin extends Plugin {
         return cacheDir;
     }
 
-    @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
-        super.handleOnActivityResult(requestCode, resultCode, data);
-        if (requestCode == SEND_REQUEST_CODE) {
-            PluginCall call = getSavedCall();
+    @ActivityCallback
+    private void callbackComplete(PluginCall call, Instrumentation.ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_CANCELED) {
+            call.reject("Activity canceled");
+        } else {
+            call = getSavedCall();
             call.resolve();
         }
     }
-
 }

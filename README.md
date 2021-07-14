@@ -18,40 +18,21 @@ This example shows the common process of configuring this plugin.
 
 Although it was taken from a Angular 6 application, it should work in other frameworks as well.
 
-### Register plugin
 
-Find the init component of your app, which is in Angular `app.component.ts` and register this plugin by
-
-```
-import {registerWebPlugin} from "@capacitor/core";
-import {FileSharer} from '@byteowls/capacitor-filesharer';
-
-@Component()
-export class AppComponent implements OnInit {
-
-    ngOnInit() {
-        console.log("Register custom capacitor plugins");
-        registerWebPlugin(FileSharer);
-        // other stuff
-    }
-}
-```
-
-This is a workaround because the plugin registers itself but that did not work for Angular.
 
 ### Use it
 
 ```typescript
 import {
-  Plugins
-} from '@capacitor/core';
+  FileSharer
+} from '@byteowls/capacitor-filesharer';
 
 @Component({
   template: '<button (click)="downloadButtonClick()">Download file</button>'
 })
 export class SignupComponent {
     downloadButtonClick() {
-        Plugins.FileSharer.share({
+        FileSharer.share({
             filename: "test.pdf",
             base64Data: "...",
             contentType: "application/pdf",
