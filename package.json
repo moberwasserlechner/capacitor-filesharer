@@ -6,19 +6,22 @@
     "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",
     "license": "MIT",
     "main": "dist/esm/index.js",
+    "module": "dist/esm/index.js",
     "types": "dist/esm/index.d.ts",
     "scripts": {
         "build": "npm run clean && tsc",
         "clean": "rimraf ./dist",
         "watch": "tsc --watch",
+        "test": "jest",
         "removePacked": "rimraf byteowls-capacitor-filesharer-*.tgz",
         "publishLocally": "npm run removePacked && npm run build && npm pack",
         "prepublishOnly": "npm run build"
     },
     "files": [
+        "android/src/main/",
+        "android/build.gradle",
         "dist/",
-        "ios/",
-        "android/",
+        "ios/ByteowlsCapacitorFilesharer/Source",
         "ByteowlsCapacitorFilesharer.podspec"
     ],
     "keywords": [
@@ -50,14 +53,18 @@
         "@capacitor/core": "^3.0.0"
     },
     "dependencies": {
-        "file-saver": "^2.0.2"
+        "file-saver": "^2.0.5"
     },
     "devDependencies": {
-        "@capacitor/android": "3.0.0",
-        "@capacitor/core": "3.0.0",
-        "@capacitor/ios": "3.0.0",
-        "@types/file-saver": "2.0.1",
-        "rimraf": "^3.0.2",
-        "typescript": "^3.5.3"
+        "@capacitor/android": "3.2.0",
+        "@capacitor/core": "3.2.0",
+        "@capacitor/ios": "3.2.0",
+        "@types/file-saver": "2.0.3",
+        "@types/jest": "27.0.1",
+        "jest": "27.1.0",
+        "ts-jest": "27.0.5",
+        "eslint": "7.32.0",
+        "rimraf": "3.0.2",
+        "typescript": "4.1.5"
     }
 }

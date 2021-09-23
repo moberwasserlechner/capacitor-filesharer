@@ -1,9 +1,3 @@
-declare global {
-    interface PluginRegistry {
-        FileSharer?: FileSharerPlugin;
-    }
-}
-
 export interface FileSharerPlugin {
     /**
      * Share a file using the native share dialog on Android and iOS and download the file on Web.

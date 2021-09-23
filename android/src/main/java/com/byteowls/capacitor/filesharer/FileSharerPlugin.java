@@ -1,11 +1,14 @@
 package com.byteowls.capacitor.filesharer;
 
 import android.app.Activity;
-import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.activity.result.ActivityResult;
+
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -15,6 +18,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 @CapacitorPlugin(name = "FileSharer")
 public class FileSharerPlugin extends Plugin {
@@ -31,34 +35,38 @@ public class FileSharerPlugin extends Plugin {
     private static final String ERR_PARAM_NO_DATA = "ERR_PARAM_NO_DATA";
     private static final String ERR_FILE_CACHING_FAILED = "ERR_FILE_CACHING_FAILED";
     private static final String ERR_PARAM_DATA_INVALID = "ERR_PARAM_DATA_INVALID";
+    private static final String USER_CANCELLED = "USER_CANCELLED";
+
+    private String callbackId;
 
     public FileSharerPlugin() {}
 
-    @SuppressWarnings("Duplicates")
     @PluginMethod()
     public void share(final PluginCall call) {
-        String fileProviderName = getContext().getPackageName() + ".filesharer.fileprovider";
+        final String fileProviderName = getContext().getPackageName() + ".filesharer.fileprovider";
+        this.callbackId = call.getCallbackId();
 
-        String filename = ConfigUtils.getCallParam(String.class, call, PARAM_FILENAME);
+        JSObject callData = call.getData();
+        String filename = ConfigUtils.getParamString(callData, PARAM_FILENAME);
         if (filename == null || filename.length() == 0) {
             call.reject(ERR_PARAM_NO_FILENAME);
             return;
         }
 
-        String contentType = ConfigUtils.getCallParam(String.class, call, PARAM_CONTENT_TYPE);
+        String contentType = ConfigUtils.getParamString(callData, PARAM_CONTENT_TYPE);
         if (contentType == null || contentType.length() == 0) {
             call.reject(ERR_PARAM_NO_CONTENT_TYPE);
             return;
         }
 
-        String base64Data = ConfigUtils.getCallParam(String.class, call, PARAM_BASE64_DATA);
+        String base64Data = ConfigUtils.getParamString(callData, PARAM_BASE64_DATA);
         if (base64Data == null || base64Data.length() == 0) {
             call.reject(ERR_PARAM_NO_DATA);
             return;
         }
 
-        String chooserTitle = ConfigUtils.getCallParam(String.class, call, PARAM_ANDROID_CHOOSER);
-        saveCall(call);
+        String chooserTitle = ConfigUtils.getParamString(callData, PARAM_ANDROID_CHOOSER);
+        this.bridge.saveCall(call);
 
         // save cachedFile to cache dir
         File cachedFile = new File(getCacheDir(), filename);
@@ -71,15 +79,15 @@ public class FileSharerPlugin extends Plugin {
             call.reject(ERR_FILE_CACHING_FAILED);
             return;
         } catch (IllegalArgumentException e) {
+            Log.e(getLogTag(), e.getMessage());
             call.reject(ERR_PARAM_DATA_INVALID);
             return;
         }
 
         // create a send intent
+        Uri contentUri = FileSharerProvider.getUriForFile(getContext(), fileProviderName, cachedFile);
 
         final Intent sendIntent = new Intent(Intent.ACTION_SEND);
-
-        Uri contentUri = FileSharerProvider.getUriForFile(getContext(), fileProviderName, cachedFile);
         sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
         sendIntent.setTypeAndNormalize(contentType);
         sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -95,20 +103,22 @@ public class FileSharerPlugin extends Plugin {
             //noinspection ResultOfMethodCallIgnored
             cacheDir.mkdirs();
         } else {
-            for (File f : cacheDir.listFiles()) {
-                //noinspection ResultOfMethodCallIgnored
-                f.delete();
+            if (cacheDir.listFiles() != null) {
+                for (File f : Objects.requireNonNull(cacheDir.listFiles())) {
+                    //noinspection ResultOfMethodCallIgnored
+                    f.delete();
+                }
             }
         }
         return cacheDir;
     }
 
     @ActivityCallback
-    private void callbackComplete(PluginCall call, Instrumentation.ActivityResult result) {
+    private void callbackComplete(PluginCall call, ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_CANCELED) {
-            call.reject("Activity canceled");
+            call.reject(USER_CANCELLED);
         } else {
-            call = getSavedCall();
+            call = this.bridge.getSavedCall(this.callbackId);
             call.resolve();
         }
     }

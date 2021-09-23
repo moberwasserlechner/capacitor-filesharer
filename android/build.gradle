@@ -1,23 +1,35 @@
+ext {
+    androidxCoreVersion = project.hasProperty('androidxCoreVersion') ? rootProject.ext.androidxCoreVersion : '1.6.0'
+    androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.2.0'
+    junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.1'
+    junit5Version = project.hasProperty('junit5Version') ? rootProject.ext.junit5Version : '5.7.2'
+    androidJunit5Version = project.hasProperty('androidJunit5Version') ? rootProject.ext.androidJunit5Version : '1.2.2'
+    androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.4.0'
+}
+
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:4.2.2'
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 30
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 2
-        versionName "2.0.0"
+        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 21
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 30
+        versionCode 3
+        versionName "3.0.0"
+        // 1) Make sure to use the AndroidJUnitRunner, or a subclass of it. This requires a dependency on androidx.test:runner, too!
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        // 2) Connect JUnit 5 to the runner
+//        testInstrumentationRunnerArgument("runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder")
     }
     buildTypes {
         release {
@@ -37,14 +49,17 @@ android {
 repositories {
     google()
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     implementation project(':capacitor-android')
 
-    implementation 'androidx.core:core:1.0.0'
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    // 4) Jupiter API & Test Runner, if you don't have it already
+    testImplementation("org.junit.jupiter:junit-jupiter-params:${junit5Version}")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junit5Version}") {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }

@@ -1,18 +1,17 @@
 require 'json'
 
-  Pod::Spec.new do |s|
-    # NPM package specification
-    package = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'package.json')))
+package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
+Pod::Spec.new do |s|
     s.name = 'ByteowlsCapacitorFilesharer'
     s.version = package['version']
     s.summary = package['description']
     s.license = package['license']
-    s.homepage = package['homepage']
+    s.homepage = package['repository']['url']
     s.author = package['author']
+    s.source = { :git => package['repository']['url'], :tag => s.version.to_s }
+    s.source_files = 'ios/ByteowlsCapacitorFilesharer/Source/*.{swift,h,m,c,cc,mm,cpp}'
     s.ios.deployment_target  = '12.0'
     s.dependency 'Capacitor'
-    s.source = { :git => 'https://github.com/moberwasserlechner/capacitor-filesharer', :tag => s.version.to_s }
-    s.source_files = 'ios/ByteowlsCapacitorFilesharer/Source/*.{swift,h,m}'
-    s.swift_version = '5.0'
-  end
+    s.swift_version = '5.1'
+end

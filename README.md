@@ -1,24 +1,36 @@
-# Capacitor plugin for file sharing
+# Capacitor File Sharing plugin
 
-[![npm](https://img.shields.io/npm/v/@byteowls/capacitor-filesharer.svg)](https://www.npmjs.com/package/@byteowls/capacitor-filesharer)
-[![npm](https://img.shields.io/npm/dt/@byteowls/capacitor-filesharer.svg?label=npm%20downloads)](https://www.npmjs.com/package/@byteowls/capacitor-filesharer)
-[![Twitter Follow](https://img.shields.io/twitter/follow/michaelowl_web.svg?style=social&label=Follow&style=flat-square)](https://twitter.com/michaelowl_web)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/moberwasserlechner)
+<a href="https://github.com/moberwasserlechner/capacitor-filesharer/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/moberwasserlechner/capacitor-filesharer/CI?style=flat-square" /></a>
+<a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/dw/@byteowls/capacitor-filesharer?style=flat-square" /></a>
+<a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/v/@byteowls/capacitor-filesharer?style=flat-square" /></a>
+<a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/l/@byteowls/capacitor-filesharer?style=flat-square" /></a>
 
+## How to install
 
-## Installation
+For Capacitor v3
+```bash
+npm i @byteowls/capacitor-filesharer
+npx cap sync
+```
+For Capacitor v2 use `2.0.0`
+```bash
+npm i @byteowls/capacitor-filesharer@2.0.0
+npx cap sync
+```
 
-`npm i @byteowls/capacitor-filesharer`
+For further details on what has changed see the [CHANGELOG](https://github.com/moberwasserlechner/capacitor-filesharer/blob/main/CHANGELOG.md).
 
-Minimum Capacitor version is **2.0.0**
+## Maintainers
+
+| Maintainer | GitHub | Social |
+| -----------| -------| -------|
+| Michael Oberwasserlechner | [moberwasserlechner](https://github.com/moberwasserlechner) |  |
+
+Actively maintained: YES
 
 ## Configuration
 
-This example shows the common process of configuring this plugin.
-
-Although it was taken from a Angular 6 application, it should work in other frameworks as well.
-
-
+Starting with version 3.0.0, the plugin is registered automatically on all platforms.
 
 ### Use it
 
@@ -55,43 +67,21 @@ export class SignupComponent {
 
 ## Platform: Web/PWA
 
-No further config is needed.
+### Register plugin
+On Web/PWA the plugin is registered **automatically** by Capacitor.
 
 ## Platform: Android
 
-**Register the plugin** in `com.companyname.appname.MainActivity#onCreate`
+Prerequisite: [Capacitor Android Docs](https://capacitor.ionicframework.com/docs/android/configuration)
 
-```
-import com.byteowls.capacitor.filesharer.FileSharerPlugin;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        List<Class<? extends Plugin>> additionalPlugins = new ArrayList<>();
-        // Additional plugins you've installed go here
-        // Ex: additionalPlugins.add(TotallyAwesomePlugin.class);
-        additionalPlugins.add(FileSharerPlugin.class);
-
-        // Initializes the Bridge
-        this.init(savedInstanceState, additionalPlugins);
-    }
-```
-
-Override the onSaveInstanceState on the main activity to avoid an issue that results in !!! FAILED BINDER TRANSACTION !!! errors when dealing with larger files ([Related issue](https://github.com/moberwasserlechner/capacitor-filesharer/issues/13))
-
-```
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-    outState.clear();
-  }
-```
+### Register plugin
+On Android the plugin is registered **automatically** by Capacitor.
 
 ## Platform: iOS
+Prerequisite: [Capacitor iOS Docs](https://capacitor.ionicframework.com/docs/ios/configuration)
 
-No further config is needed. On iOS the plugin is registered automatically by Capacitor.
+### Register plugin
+On iOS the plugin is registered **automatically** by Capacitor.
 
 ## Platform: Electron
 
@@ -99,15 +89,21 @@ No further config is needed. On iOS the plugin is registered automatically by Ca
 
 ## Contribute
 
-See [Contribution Guidelines](https://github.com/moberwasserlechner/capacitor-filesharer/blob/master/.github/CONTRIBUTING.md).
+See [Contribution Guidelines](https://github.com/moberwasserlechner/capacitor-filesharer/blob/main/.github/CONTRIBUTING.md).
 
 ## Changelog
-See [CHANGELOG](https://github.com/moberwasserlechner/capacitor-filesharer/blob/master/CHANGELOG.md).
+See [CHANGELOG](https://github.com/moberwasserlechner/capacitor-filesharer/blob/main/CHANGELOG.md).
 
 ## License
 
-MIT. Please see [LICENSE](https://github.com/moberwasserlechner/capacitor-filesharer/blob/master/LICENSE).
+MIT. Please see [LICENSE](https://github.com/moberwasserlechner/capacitor-filesharer/blob/main/LICENSE).
 
 ## BYTEOWLS Software & Consulting
 
-This plugin is powered by [BYTEOWLS Software & Consulting](https://byteowls.com) and was build for [Team Conductor](https://team-conductor.com/en/) - Next generation club management platform.
+This plugin is powered by [BYTEOWLS Software & Consulting](https://byteowls.com).
+
+If you need extended support for this project like critical changes or releases ahead of schedule. Feel free to contact us for a consulting offer.
+
+## Disclaimer
+
+We have no business relation to Ionic.
