@@ -91,7 +91,7 @@ public class FileSharerPlugin: CAPPlugin {
             DispatchQueue.main.async {
                 let activityVC = UIActivityViewController(activityItems: tmpUrls, applicationActivities: nil)
                 // must be on the main thread
-                let capacitorView = self.bridge.viewController.view
+                let capacitorView = self.bridge?.viewController?.view
 
                 // On iPhones the activity is shown as modal
                 // On iPads on the other side it must be a popover by providing either a (sourceView AND sourceRect) OR a barButtonItem.
@@ -102,7 +102,7 @@ public class FileSharerPlugin: CAPPlugin {
                            width: 0,
                            height: 0)
 
-                self.bridge.viewController.present(activityVC, animated: true, completion: {
+                self.bridge?.viewController?.present(activityVC, animated: true, completion: {
                     call.resolve()
                 })
             }
