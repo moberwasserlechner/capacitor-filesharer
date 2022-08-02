@@ -1,6 +1,6 @@
 {
     "name": "@byteowls/capacitor-filesharer",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "description": "Capacitor plugin to download and share files for the Web, Android and iOS",
     "author": "Michael Oberwasserlechner",
     "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",
@@ -50,15 +50,15 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@capacitor/core": "^3.0.0"
+        "@capacitor/core": "^4.0.0"
     },
     "dependencies": {
         "file-saver": "^2.0.5"
     },
     "devDependencies": {
-        "@capacitor/android": "3.2.3",
-        "@capacitor/core": "3.2.3",
-        "@capacitor/ios": "3.2.3",
+        "@capacitor/android": "^4.0.0",
+        "@capacitor/core": "^4.0.0",
+        "@capacitor/ios": "^4.0.0",
         "@types/file-saver": "2.0.3",
         "@types/jest": "27.0.2",
         "jest": "27.2.1",
