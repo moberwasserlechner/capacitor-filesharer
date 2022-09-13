@@ -46,8 +46,11 @@ export class SignupComponent {
     downloadButtonClick() {
         FileSharer.share({
             filename: "test.pdf",
-            base64Data: "...",
             contentType: "application/pdf",
+            // If you want to save base64:
+            base64Data: "...",
+            // If you want to save a file from a path:
+            path: "../../file.pdf",
         }).then(() => {
             // do sth
         }).catch(error => {
