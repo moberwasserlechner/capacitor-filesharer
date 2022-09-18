@@ -58,7 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share files using the native share dialog on Android and iOS
 - Download files on the Web
 
-[Unreleased]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/3.0.0...main
+[Unreleased]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/4.0.0...main
+[4.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/3.0.0...4.0.0
 [3.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/2.0.0...3.0.0
 [2.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/1.0.1...2.0.0
 [1.0.1]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/1.0.0...1.0.1
