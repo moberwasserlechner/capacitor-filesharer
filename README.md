@@ -5,11 +5,17 @@
 <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/v/@byteowls/capacitor-filesharer?style=flat-square" /></a>
 <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/l/@byteowls/capacitor-filesharer?style=flat-square" /></a>
 
-## How to install
+## Installation
 
-For Capacitor v3
+For Capacitor v4
 ```bash
 npm i @byteowls/capacitor-filesharer
+npx cap sync
+```
+
+For Capacitor v3 use `3.0.0`
+```bash
+npm i @byteowls/capacitor-filesharer@3.0.0
 npx cap sync
 ```
 For Capacitor v2 use `2.0.0`
@@ -19,6 +25,15 @@ npx cap sync
 ```
 
 For further details on what has changed see the [CHANGELOG](https://github.com/moberwasserlechner/capacitor-filesharer/blob/main/CHANGELOG.md).
+
+## Versions
+
+| Plugin | For Capacitor | Docs                                                                                      | Notes                          |
+|--------|---------------|-------------------------------------------------------------------------------------------|--------------------------------|
+| 4.x    | 4.x.x         | [README](./README.md)                                                                     | Breaking changes see Changelog. |
+| 3.x    | 3.x.x         | [README](https://github.com/moberwasserlechner/capacitor-filesharer/blob/3.0.0/README.md) | Breaking changes see Changelog. XCode 12.0 needs this version |
+| 2.x    | 2.x.x         | [README](https://github.com/moberwasserlechner/capacitor-filesharer/blob/2.0.0/README.md) | Breaking changes see Changelog. XCode 11.4 needs this version |
+| 1.x    | 1.x.x         | [README](https://github.com/moberwasserlechner/capacitor-filesharer/blob/1.0.0/README.md)        |                                |
 
 ## Maintainers
 

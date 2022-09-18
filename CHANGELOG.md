@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2022-09-18
+
+### Added
+- Support local (capacitor) file paths, in addition to base64 strings [#41](https://github.com/moberwasserlechner/capacitor-filesharer/pull/41)
+
+### Breaking
+- Capacitor 4.x is new minimum peer dependency.
+
 ## [3.0.0] - 2021-09-23
 
 ### Breaking
