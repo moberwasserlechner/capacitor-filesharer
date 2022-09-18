@@ -13,9 +13,13 @@ export interface ShareFileOptions {
      */
     filename: string;
     /**
-     * The base64 encoded data.
+     * The base64 encoded data or capacitor file url.
      */
-    base64Data: string;
+    base64Data?: string;
+    /**
+     * The local path you can find the file
+     */
+    path?: string;
     /**
      * The content type of the provided data.
      */

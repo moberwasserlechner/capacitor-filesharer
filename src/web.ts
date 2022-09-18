@@ -17,7 +17,7 @@ export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
 
             let blob = new Blob(
                 [
-                    WebUtils.toByteArray(options.base64Data)
+                    WebUtils.toByteArray(options.base64Data!)
                 ],
                 {
                     type: options.contentType
