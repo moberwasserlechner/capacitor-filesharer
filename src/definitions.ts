@@ -11,6 +11,13 @@ export interface FileSharerPlugin {
      * @returns {Promise<void>}
      */
     share(options: ShareFileOptions): Promise<void>;
+
+    /**
+     * Share multiple files using the native share dialog on Android and iOS and download the file on Web.
+     * @param {ShareFileOptions} options
+     * @returns {Promise<void>}
+     */
+    shareMultiple(options: ShareFileOptions): Promise<void>;
 }
 
 export interface ShareFileOptions {
@@ -36,3 +43,15 @@ export interface ShareFileOptions {
         chooserTitle: string;
     }
 }
+
+export interface ShareMultipleFileOptions {
+    /**
+     * The filename with a extension.
+     */
+    filenameArray: string[];
+    /**
+     * The base64 encoded data.
+     */
+    base64DataArray: string[];
+}
+
