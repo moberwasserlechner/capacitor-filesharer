@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.core.content.FileProvider;
+
+import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -15,6 +20,14 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.List;
+import android.webkit.MimeTypeMap;
+import android.os.Build;
+import android.app.PendingIntent;
+
+
 
 @CapacitorPlugin(name = "FileSharer")
 public class FileSharerPlugin extends Plugin {
@@ -33,6 +46,68 @@ public class FileSharerPlugin extends Plugin {
     private static final String ERR_PARAM_DATA_INVALID = "ERR_PARAM_DATA_INVALID";
 
     public FileSharerPlugin() {}
+
+    @PluginMethod()
+    public void shareMultiple(PluginCall call) {
+        JSArray files = call.getArray("files");
+        String dialogTitle = call.getString("dialogTitle", "Share");
+
+        Intent intent = new Intent(files != null && files.length() > 1 ? Intent.ACTION_SEND_MULTIPLE : Intent.ACTION_SEND);
+
+        shareMultipleFiles(files, intent, call);
+
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+        PendingIntent pi = PendingIntent.getBroadcast(getContext(), 0, new Intent(Intent.EXTRA_CHOSEN_COMPONENT), flags);
+        Intent chooser = Intent.createChooser(intent, dialogTitle, pi.getIntentSender());
+        chooser.addCategory(Intent.CATEGORY_DEFAULT);
+        startActivityForResult(call, chooser, "shareMultipleCallback");
+    }
+
+    @ActivityCallback
+    public void shareMultipleCallback(PluginCall call, Object result) {
+        call.resolve();
+    }
+
+    private void shareMultipleFiles(JSArray files, Intent intent, PluginCall call) {
+        List<Object> filesList;
+        ArrayList<Uri> fileUris = new ArrayList<>();
+        try {
+            filesList = files.toList();
+            for (int i = 0; i < filesList.size(); i++) {
+                String file = (String) filesList.get(i);
+
+                String type = getMimeType(file);
+                if (type == null || filesList.size() > 1) {
+                    type = "*/*";
+                }
+                intent.setType(type);
+
+                Uri fileUrl = FileProvider.getUriForFile(
+                    getContext(),
+                    getContext().getPackageName() + ".fileprovider",
+                    new File(Uri.parse(file).getPath())
+                );
+                fileUris.add(fileUrl);
+            }
+            if (fileUris.size() > 1) {
+                intent.putExtra(Intent.EXTRA_STREAM, fileUris);
+            } else if (fileUris.size() == 1) {
+                intent.putExtra(Intent.EXTRA_STREAM, fileUris.get(0));
+            }
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } catch (Exception ex) {
+            call.reject(ex.getLocalizedMessage());
+            return;
+        }
+    }
+    private String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
 
     @SuppressWarnings("Duplicates")
     @PluginMethod()
