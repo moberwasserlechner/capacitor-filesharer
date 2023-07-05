@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.1] - 2023-07-10
+
+### Fixed
+
+- Add Android config to readme. [#42](https://github.com/moberwasserlechner/capacitor-filesharer/issues/42)
+
 ## [4.0.0] - 2022-09-18
 
 ### Added

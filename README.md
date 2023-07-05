@@ -92,6 +92,26 @@ On Web/PWA the plugin is registered **automatically** by Capacitor.
 
 Prerequisite: [Capacitor Android Docs](https://capacitor.ionicframework.com/docs/android/configuration)
 
+### Configure
+
+Add `outState.clear()` to your `MainActivity`. This fixes `android.os.TransactionTooLargeException` when sharing larger files.
+
+```java
+package com.company.project;
+
+import android.os.Bundle;
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.clear();
+  }
+}
+```
+
 ### Register plugin
 On Android the plugin is registered **automatically** by Capacitor.
 
@@ -115,12 +135,6 @@ See [CHANGELOG](https://github.com/moberwasserlechner/capacitor-filesharer/blob/
 ## License
 
 MIT. Please see [LICENSE](https://github.com/moberwasserlechner/capacitor-filesharer/blob/main/LICENSE).
-
-## BYTEOWLS Software & Consulting
-
-This plugin is powered by [BYTEOWLS Software & Consulting](https://byteowls.com).
-
-If you need extended support for this project like critical changes or releases ahead of schedule. Feel free to contact us for a consulting offer.
 
 ## Disclaimer
 
