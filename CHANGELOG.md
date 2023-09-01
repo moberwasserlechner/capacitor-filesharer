@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - TBD
+
+### Breaking
+- Capacitor 5.x is new minimum peer dependency.
+
 ## [4.0.1] - 2023-07-10
 
 ### Fixed
