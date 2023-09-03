@@ -1,7 +1,11 @@
 package com.byteowls.capacitor.filesharer;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
@@ -21,6 +25,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @CapacitorPlugin(name = "FileSharer")
@@ -73,7 +79,7 @@ public class FileSharerPlugin extends Plugin {
                     path = parts[1];
                 }
                 try {
-                    InputStream is = new FileInputStream(new File(path));
+                    InputStream is = new FileInputStream(path);
                     base64Data = readFileAsBase64EncodedData(is);
                 } catch (IOException e) {
                     Log.e(getLogTag(), e.getMessage());
@@ -106,17 +112,43 @@ public class FileSharerPlugin extends Plugin {
             return;
         }
 
-        // create a send intent
-        Uri contentUri = FileSharerProvider.getUriForFile(getContext(), fileProviderName, cachedFile);
+        if (cachedFile.exists()) {
+            Uri contentUri = FileSharerProvider.getUriForFile(getContext(), fileProviderName, cachedFile);
 
-        final Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        sendIntent.setTypeAndNormalize(contentType);
-        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivityForResult(call, Intent.createChooser(sendIntent, chooserTitle), "callbackComplete");
+            // create a send intent
+            final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            sendIntent.setTypeAndNormalize(contentType);
+            sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            List<LabeledIntent> intentList = new ArrayList<>();
+
+            PackageManager packageManager = getContext().getPackageManager();
+            // find activities that can handle the file shared
+            List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(sendIntent, 0);
+            for (ResolveInfo resolveInfo : resolveInfos) {
+                String packageName = resolveInfo.activityInfo.packageName;
+                final Intent intent = new Intent();
+                intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
+                intent.setPackage(packageName);
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                intent.setTypeAndNormalize(contentType);
+                intentList.add(new LabeledIntent(
+                    intent, packageName, resolveInfo.loadLabel(packageManager), resolveInfo.getIconResource())
+                );
+            }
+            Intent chooser = Intent.createChooser(sendIntent, chooserTitle);
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new LabeledIntent[0]));
+
+            startActivityForResult(call, chooser, "callbackComplete");
+        } else {
+            Log.e(getLogTag(), "Cached file does not exist!");
+            call.reject(ERR_FILE_CACHING_FAILED);
+        }
     }
 
     public String readFileAsBase64EncodedData(InputStream is) throws IOException {
