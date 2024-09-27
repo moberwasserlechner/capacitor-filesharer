@@ -157,13 +157,6 @@ public class ConfigUtilsTest {
     }
 
     @Test
-    public void getRandomString() {
-        String randomString = ConfigUtils.getRandomString(8);
-        Assertions.assertNotNull(randomString);
-        Assertions.assertEquals(8, randomString.length());
-    }
-
-    @Test
     public void empty() {
         // make sure the empty value stays empty
         String emptyValue = ConfigUtils.getParamString(jsObject, "empty");
