@@ -15,12 +15,12 @@ jobs:
         timeout-minutes: 30
 
         steps:
-            - uses: actions/setup-node@v2
+            - uses: actions/setup-node@v4
               with:
-                  node-version: 16
-            - uses: actions/checkout@v3
+                  node-version: 22
+            - uses: actions/checkout@v4
             - name: Restore Dependency Cache
-              uses: actions/cache@v1
+              uses: actions/cache@v4
               with:
                   path: ~/.npm
                   key: ${{ runner.OS }}-dependency-cache-${{ hashFiles('**/package.json') }}
@@ -52,18 +52,18 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 30
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-java@v3
+            - uses: actions/checkout@v4
+            - uses: actions/setup-java@v4
               with:
                 distribution: zulu
-                java-version: 17
+                java-version: 21
 
             - name: Grant execute permission for gradlew
               run: chmod +x gradlew
               working-directory: ./android
 
             - name: Cache .gradle
-              uses: actions/cache@v1
+              uses: actions/cache@v4
               with:
                   path: .gradle
                   key: ${{ runner.os }}-dotgradle-${{ hashFiles('**/build.gradle') }}
@@ -71,7 +71,7 @@ jobs:
                       ${{ runner.os }}-dotgradle-
 
             - name: Cache gradle
-              uses: actions/cache@v1
+              uses: actions/cache@v4
               with:
                   path: ~/.gradle
                   key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle') }}
