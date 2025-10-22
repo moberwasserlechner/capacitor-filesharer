@@ -93,6 +93,7 @@ public class FileSharerPlugin extends Plugin {
         }
 
         String chooserTitle = ConfigUtils.getParamString(callData, PARAM_ANDROID_CHOOSER);
+        String text = ConfigUtils.getParamString(callData, "text"); // optional caption text
         this.bridge.saveCall(call);
 
         // save cachedFile to cache dir
@@ -120,9 +121,14 @@ public class FileSharerPlugin extends Plugin {
             sendIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
             sendIntent.setTypeAndNormalize(contentType);
             sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            sendIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            // Include caption text (if provided)
+            if (text != null && !text.isEmpty()) {
+                sendIntent.putExtra(Intent.EXTRA_TEXT, text);
+            }
 
             List<LabeledIntent> intentList = new ArrayList<>();
 
@@ -137,6 +143,12 @@ public class FileSharerPlugin extends Plugin {
                 intent.setAction(Intent.ACTION_SEND);
                 intent.putExtra(Intent.EXTRA_STREAM, contentUri);
                 intent.setTypeAndNormalize(contentType);
+                
+                // Add caption text to each intent as well
+                if (text != null && !text.isEmpty()) {
+                    intent.putExtra(Intent.EXTRA_TEXT, text);
+                }
+                
                 intentList.add(new LabeledIntent(
                     intent, packageName, resolveInfo.loadLabel(packageManager), resolveInfo.getIconResource())
                 );
