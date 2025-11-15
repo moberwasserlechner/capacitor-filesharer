@@ -1,6 +1,6 @@
 {
   "name": "@webnativellc/capacitor-filesharer",
-  "version": "7.0.4",
+  "version": "7.1.0",
   "description": "Capacitor plugin to download and share files for the Web, Android and iOS",
   "author": "Michael Oberwasserlechner",
   "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",
@@ -21,8 +21,9 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
-    "ios/WebnativellcCapacitorFilesharer/Source",
-    "WebnativellcCapacitorFilesharer.podspec"
+    "ios/WebnativellcCapacitorFilesharer/Sources",
+    "WebnativellcCapacitorFilesharer.podspec",
+    "Package.swift"
   ],
   "keywords": [
     "capacitor",

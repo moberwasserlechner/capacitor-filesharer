@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.1.0] - 2025-11-15
+
+### Added
+- Swift Package Manager (SPM) support for iOS
+- Package.swift manifest for SPM compatibility
+
+### Changed
+- iOS source files moved from `ios/WebnativellcCapacitorFilesharer/Source` to `ios/WebnativellcCapacitorFilesharer/Sources`
+- Updated Swift plugin to conform to `CAPBridgedPlugin` protocol
+- Updated podspec to point to new Sources directory
+
+## [7.0.0] - 2024-07-25
+
+### Breaking
+- Capacitor 7.x is new minimum peer dependency
+
 ## [6.0.0] - 2024-07-25
 
 ### Breaking

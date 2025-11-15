@@ -2,7 +2,12 @@ import Foundation
 import Capacitor
 
 @objc(FileSharerPlugin)
-public class FileSharerPlugin: CAPPlugin {
+public class FileSharerPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "FileSharerPlugin"
+    public let jsName = "FileSharer"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "share", returnType: CAPPluginReturnPromise)
+    ]
 
     let PARAM_FILENAME = "filename"
     let PARAM_BASE64_DATA = "base64Data"
