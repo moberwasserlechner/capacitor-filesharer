@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/moberwasserlechner/capacitor-filesharer#readme
+    about: Check installation, platform configuration, and known error codes before opening an issue.

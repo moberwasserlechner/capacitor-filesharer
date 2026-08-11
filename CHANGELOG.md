@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Swift Package Manager packaging and public iOS CI builds.
+- ESM, CommonJS, and bundled declaration package entry points with consumer verification.
+
+### Changed
+- Migrated development workflows from npm and Jest to pnpm and Vitest.
+- Modernized TypeScript, Android, and package build tooling.
+
+### Fixed
+- Web validation failures no longer continue into a file download attempt.
+
+### Breaking
+- Capacitor 8 is the new minimum peer dependency.
+- iOS distribution now requires Swift Package Manager; CocoaPods support has been removed.
+
 ## [7.0.0] - 2025-07-22
 
 ### Breaking

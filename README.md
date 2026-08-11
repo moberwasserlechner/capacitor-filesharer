@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/maintenance/yes/2024?style=flat-square" />
+    <img src="https://img.shields.io/maintenance/yes/2025?style=flat-square" />
     <a href="https://github.com/moberwasserlechner/capacitor-filesharer/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/actions/workflow/status/moberwasserlechner/capacitor-filesharer/ci.yml?style=flat-square" /></a>
     <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/l/@byteowls/capacitor-filesharer?style=flat-square" /></a>
 <br>
@@ -28,10 +28,11 @@ For further details on what has changed see the [CHANGELOG](https://github.com/m
 
 ## Versions
 
-| Plugin | For Capacitor | Docs                                                                                      | Notes                                                         |
-|--------|---------------|-------------------------------------------------------------------------------------------|---------------------------------------------------------------|
-| 7.x    | 7.x.x         | [README](./README.md)                                                                     | Breaking changes see Changelog.                               |
-| 6.x    | 6.x.x         | [README](https://github.com/moberwasserlechner/capacitor-filesharer/blob/6.0.0/README.md) | Breaking changes see Changelog.                               |
+| Plugin | For Capacitor | Docs                                                                                      | Notes                           |
+|--------|---------------|-------------------------------------------------------------------------------------------|---------------------------------|
+| 8.x    | 8.x.x         | [README](./README.md)                                                                     | Swift Package Manager on iOS.   |
+| 7.x    | 7.x.x         | [README](https://github.com/moberwasserlechner/capacitor-filesharer/blob/7.0.0/README.md) | CocoaPods; see the changelog.   |
+| 6.x    | 6.x.x         | [README](https://github.com/moberwasserlechner/capacitor-filesharer/blob/6.0.0/README.md) | CocoaPods; see the changelog.   |
 
 ## Configuration
 
@@ -68,6 +69,10 @@ export class SignupComponent {
 * ERR_PARAM_NO_CONTENT_TYPE ... Content type missing
 * ERR_PARAM_DATA_INVALID ... Base64 data is invalid. See [this comment](https://github.com/moberwasserlechner/capacitor-filesharer/issues/5#issuecomment-502070959) for a possible error.
 * ERR_FILE_CACHING_FAILED ... Caching the file in temp directory on the device failed.
+
+## Platform: iOS
+
+Version 8 is distributed exclusively through Swift Package Manager. Applications upgrading from plugin 7 must migrate their Capacitor iOS project from CocoaPods to Swift Package Manager before installing this release.
 
 ## Platform: Android
 

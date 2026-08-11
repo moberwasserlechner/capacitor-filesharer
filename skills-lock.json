@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "capacitor-plugin-generator": {
+      "source": "ionic-team/capacitor-skills",
+      "sourceType": "github",
+      "skillPath": "skills/capacitor-plugin-generator/SKILL.md",
+      "computedHash": "24589f2ca52d65c84a67e1b7666ef881934eb9520c0bb5ef321fe777baff5035"
+    }
+  }
+}

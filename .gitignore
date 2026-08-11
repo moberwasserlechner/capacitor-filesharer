@@ -1,5 +1,26 @@
-.idea
-node_modules
-dist
+# IDE
+.idea/
+.junie/
+.vscode/
+*.iml
+
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+coverage/
+.build/
+.swiftpm/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+
+# Packages
 *.tgz

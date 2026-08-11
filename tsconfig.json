@@ -1,20 +1,25 @@
 {
-    "compilerOptions": {
-        "allowUnreachableCode": false,
-        "declaration": true,
-        "esModuleInterop": true,
-        "lib": ["dom", "es2017"],
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noFallthroughCasesInSwitch": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "outDir": "dist/esm",
-        "pretty": true,
-        "sourceMap": true,
-        "strict": true,
-        "strictPropertyInitialization": false,
-        "target": "es2017"
-    },
-    "files": ["src/index.ts"]
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "rootDir": "src",
+    "outDir": "dist/esm",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "Bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"]
 }

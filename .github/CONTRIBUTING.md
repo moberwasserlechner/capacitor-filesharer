@@ -1,51 +1,32 @@
-
 # Contributing
 
-I'm happy to accept external contributions to the project in the form of feedback,
-bug reports and even better - pull requests
+Feedback, bug reports, feature requests, and pull requests are welcome.
 
 ## Issues
 
-Issues are mostly used to track **bugs** and **feature requests** but you can also
-ask questions as it's the only place I'm looking at.
+GitHub issues are the source of truth for planned work. Search open and closed issues before creating a new report, then use the relevant issue form and provide a minimal reproduction where possible.
 
-Before reporting a bug or requesting a feature, run a few searches to
-see if a similar issue has already been opened and ensure you’re not submitting
-a duplicate.
+## Development
 
-### Bugs
-* Choose the "Bug Report" template
-* Fill in all relevant information, especially
-* Describe steps to reproduce
-* Full error message if any
-* Your code if relevant
+This project uses pnpm and requires the Node and native toolchains supported by Capacitor 8.
 
-### Feature Requests
-* Choose the "Feature Request" template
-* Describe the feature. Be specific
-* Explain why I should implement it.
+```bash
+pnpm install
+pnpm lint
+pnpm test
+pnpm verify:package
+pnpm verify:android
+pnpm verify:ios
+```
 
-## Pull Request Guidelines
-* Please check to make sure that there aren't existing pull requests attempting to address the issue mentioned.
-* Open a single PR for each subject.
-* Develop in a topic branch, not main (feature-name).
-* Write a convincing description of your PR and why I should land it.
-* Update documentation comments where applicable.
+## Pull requests
 
-### Only touch relevant files
-
-* Make sure your PR stays focused on a single feature.
-* Don't change project configs or any files unrelated to the subject you're working.
-* Don't reformat code you don't modify.
-
-### Fixing a bug?
-* Mention it or create an issue if not exist
-* Do not forget to put [Fix # in your commit message to auto close](https://help.github.com/articles/closing-issues-via-commit-messages/)
-
-### Keep your commit history short and clean.
-* Keeping the history clean means making one commit per feature. (no fix of your fix)
-* I will squash every PR.
-
-### Make sure tests pass (if exist)
-* Add relevant tests to cover the change.
-* Make sure test-suite passes.
+- Open one focused pull request per subject and link its GitHub issue.
+- Develop on a topic branch rather than `main`.
+- Explain the problem, the chosen solution, and how it was verified.
+- Preserve public API and documented behaviour unless the issue explicitly approves a breaking change for a major release.
+- Add regression tests for bug fixes and tests for new behaviour.
+- Update `README.md` where consumer guidance changes.
+- Add every user-facing change to the Unreleased section of `CHANGELOG.md`.
+- Avoid unrelated formatting or configuration changes.
+- Keep commit history concise; pull requests are squashed when merged.
