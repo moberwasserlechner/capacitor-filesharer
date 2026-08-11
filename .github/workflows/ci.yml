@@ -50,4 +50,4 @@ jobs:
           cache: gradle
       - name: Unit tests
         working-directory: android
-        run: ./gradlew clean test --no-daemon
+        run: ./gradlew clean build --no-daemon

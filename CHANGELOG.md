@@ -13,10 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Migrated development workflows from npm and Jest to pnpm and Vitest.
 - Modernized TypeScript, Android, and package build tooling.
+- Reimplemented the Android bridge and file-sharing logic in Kotlin with focused native unit tests.
 - Replaced FileSaver with a dependency-free browser Blob download implementation.
 
 ### Fixed
 - Web validation failures no longer continue into a file download attempt.
+- Android now reads the documented `android.chooserTitle` option.
+- Android local paths without Capacitor's internal URL marker no longer crash during parsing.
+- Android rejects filenames that would escape the plugin cache directory.
 
 ### Breaking
 - Capacitor 8 is the new minimum peer dependency.

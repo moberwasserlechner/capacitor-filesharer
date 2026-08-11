@@ -80,6 +80,19 @@ Version 8 is distributed exclusively through Swift Package Manager. Applications
 
 ## Platform: Android
 
+Set a custom Android share-sheet title with the platform option:
+
+```typescript
+await FileSharer.share({
+  filename: 'report.pdf',
+  contentType: 'application/pdf',
+  base64Data: '...',
+  android: {
+    chooserTitle: 'Share report',
+  },
+});
+```
+
 Add `outState.clear()` to your `MainActivity`. This fixes `android.os.TransactionTooLargeException` when sharing larger files.
 
 ```java

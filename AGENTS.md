@@ -22,7 +22,7 @@ Instructions for coding agents working on this project.
 - TypeScript in strict mode
 - pnpm
 - Capacitor 8
-- Web, Android (Java), and iOS (Swift)
+- Web, Android (Kotlin), and iOS (Swift)
 - iOS packaging through Swift Package Manager only
 - Vitest for TypeScript tests and JUnit for Android tests
 

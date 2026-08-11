@@ -30,6 +30,12 @@ Capacitor 8 is the major-version migration boundary for removing CocoaPods. The 
 
 Vitest replaces Jest and tests live under `test/`. Coverage includes implementation modules and excludes type-only declarations and registration glue. Coverage thresholds must represent meaningful tests rather than commented placeholders.
 
+## Android uses Kotlin with a thin bridge
+
+`FileSharerPlugin` parses the Capacitor call, delegates to a plain Kotlin implementation, and maps activity results back to the call. Option parsing, cache-file preparation, source loading, and intent construction are separated so file and validation behavior can be tested without mocking the Capacitor bridge.
+
+Cached filenames must resolve directly beneath the plugin-owned cache directory. Android grants recipients access through a `FileProvider` URI and `ClipData`; raw filesystem paths are never placed in the share intent.
+
 ## Web downloads use browser platform APIs directly
 
 The web implementation creates a Blob URL, clicks a temporary anchor carrying the `download` attribute, removes the anchor, and revokes the URL after a delay. The delay avoids cancelling downloads in Safari before it has consumed the URL.

@@ -164,11 +164,16 @@ try {
     const listing = run('tar', ['-tzf', tarball]).split('\n');
     for (const entry of [
       'package/android/src/main/AndroidManifest.xml',
+      'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerPlugin.kt',
       'package/ios/Sources/ByteowlsCapacitorFilesharer/FileSharerPlugin.swift',
       'package/Package.swift',
     ]) {
       assert(listing.includes(entry), `missing ${entry}`);
     }
+    assert(
+      !listing.some((entry) => entry.startsWith('package/android/src/main/java/')),
+      'unexpected legacy Android Java source',
+    );
     assert(!listing.some((entry) => entry.endsWith('.podspec')), 'unexpected CocoaPods specification');
   });
 
