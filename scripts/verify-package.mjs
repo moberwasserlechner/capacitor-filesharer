@@ -165,7 +165,8 @@ try {
     for (const entry of [
       'package/android/src/main/AndroidManifest.xml',
       'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerPlugin.kt',
-      'package/ios/Sources/ByteowlsCapacitorFilesharer/FileSharerPlugin.swift',
+      'package/ios/Sources/CapacitorFileSharer/CapacitorFileSharerFileStore.swift',
+      'package/ios/Sources/CapacitorFileSharer/CapacitorFileSharerPlugin.swift',
       'package/Package.swift',
     ]) {
       assert(listing.includes(entry), `missing ${entry}`);

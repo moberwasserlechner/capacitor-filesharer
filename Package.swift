@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "ByteowlsCapacitorFilesharer",
+    name: "CapacitorFileSharer",
     platforms: [.iOS(.v15)],
     products: [
         .library(
-            name: "ByteowlsCapacitorFilesharer",
-            targets: ["ByteowlsCapacitorFilesharer"]
+            name: "CapacitorFileSharer",
+            targets: ["CapacitorFileSharer"]
         )
     ],
     dependencies: [
@@ -15,17 +15,17 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ByteowlsCapacitorFilesharer",
+            name: "CapacitorFileSharer",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/ByteowlsCapacitorFilesharer"
+            path: "ios/Sources/CapacitorFileSharer"
         ),
         .testTarget(
-            name: "ByteowlsCapacitorFilesharerTests",
-            dependencies: ["ByteowlsCapacitorFilesharer"],
-            path: "ios/Tests/ByteowlsCapacitorFilesharerTests"
+            name: "CapacitorFileSharerTests",
+            dependencies: ["CapacitorFileSharer"],
+            path: "ios/Tests/CapacitorFileSharerTests"
         )
     ]
 )

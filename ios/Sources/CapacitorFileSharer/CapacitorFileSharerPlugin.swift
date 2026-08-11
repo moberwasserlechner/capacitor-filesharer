@@ -15,8 +15,7 @@ public class FileSharerPlugin: CAPPlugin, CAPBridgedPlugin {
 
     private static let noFilenameError = "ERR_PARAM_NO_FILENAME"
     private static let noDataError = "ERR_PARAM_NO_DATA"
-    private static let invalidDataError = "ERR_PARAM_DATA_INVALID"
-    private static let cachingFailedError = "ERR_FILE_CACHING_FAILED"
+    private let fileStore = FileSharerFileStore()
 
     @objc func share(_ call: CAPPluginCall) {
         guard let filename = call.getString(Self.filenameParameter) else {
@@ -27,19 +26,12 @@ public class FileSharerPlugin: CAPPlugin, CAPBridgedPlugin {
             call.reject(Self.noDataError)
             return
         }
-        guard let data = Data(base64Encoded: base64Data) else {
-            call.reject(Self.invalidDataError)
-            return
-        }
-
-        let temporaryURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
-
         do {
-            try data.write(to: temporaryURL)
+            let temporaryURL = try fileStore.cache(filename: filename, base64Data: base64Data)
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else {
-                    call.reject(Self.cachingFailedError)
+                    call.reject(FileSharerError.cachingFailed.rawValue)
                     return
                 }
 
@@ -63,8 +55,10 @@ public class FileSharerPlugin: CAPPlugin, CAPBridgedPlugin {
                     call.resolve()
                 }
             }
+        } catch let error as FileSharerError {
+            call.reject(error.rawValue)
         } catch {
-            call.reject(Self.cachingFailedError)
+            call.reject(FileSharerError.cachingFailed.rawValue)
         }
     }
 }

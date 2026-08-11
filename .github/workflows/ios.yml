@@ -20,9 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build iOS package
-        run: xcodebuild -scheme ByteowlsCapacitorFilesharer -destination 'generic/platform=iOS' build
+        run: xcodebuild -scheme CapacitorFileSharer -destination 'generic/platform=iOS' build
       - name: Run iOS tests
         run: |
           SIMULATOR_ID=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/{print $2; exit}')
           test -n "$SIMULATOR_ID"
-          xcodebuild -scheme ByteowlsCapacitorFilesharer -destination "platform=iOS Simulator,id=$SIMULATOR_ID" test
+          xcodebuild -scheme CapacitorFileSharer -destination "platform=iOS Simulator,id=$SIMULATOR_ID" test

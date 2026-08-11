@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Swift Package Manager packaging and public iOS CI builds.
 - ESM, CommonJS, and bundled declaration package entry points with consumer verification.
+- Focused iOS tests for plugin metadata, Base64 decoding, and temporary-file failures.
 
 ### Changed
 - Migrated development workflows from npm and Jest to pnpm and Vitest.
 - Modernized TypeScript, Android, and package build tooling.
+- Renamed the iOS Swift package, library, and test targets to `CapacitorFileSharer`.
 - Reimplemented the Android bridge and file-sharing logic in Kotlin with focused native unit tests.
 - Replaced FileSaver with a dependency-free browser Blob download implementation.
 

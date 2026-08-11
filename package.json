@@ -39,7 +39,7 @@
     "verify:package": "pnpm build && node scripts/verify-package.mjs",
     "verify:web": "pnpm lint && pnpm test && pnpm verify:package",
     "verify:android": "cd android && ./gradlew clean build --no-daemon",
-    "verify:ios": "xcodebuild -scheme ByteowlsCapacitorFilesharer -destination 'generic/platform=iOS' build",
+    "verify:ios": "xcodebuild -scheme CapacitorFileSharer -destination 'generic/platform=iOS' build",
     "verify": "pnpm verify:web && pnpm verify:ios && pnpm verify:android",
     "removePacked": "rimraf byteowls-capacitor-filesharer-*.tgz",
     "publish:locally": "pnpm removePacked && pnpm build && pnpm pack",
