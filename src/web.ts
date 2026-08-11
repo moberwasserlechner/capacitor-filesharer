@@ -1,8 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
-import { saveAs } from 'file-saver';
 
 import type { FileSharerPlugin, ShareFileOptions } from './definitions';
 import { decodeBase64 } from './web/base64';
+import { saveBlob } from './web/save-blob';
 
 export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
   async share(options: ShareFileOptions): Promise<void> {
@@ -19,6 +19,6 @@ export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
     const blob = new Blob([decodeBase64(options.base64Data)], {
       type: options.contentType,
     });
-    saveAs(blob, options.filename);
+    saveBlob(blob, options.filename);
   }
 }

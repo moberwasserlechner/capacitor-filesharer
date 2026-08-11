@@ -1,18 +1,18 @@
-import { saveAs } from 'file-saver';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ShareFileOptions } from '../src/definitions';
 import { FileSharerPluginWeb } from '../src/web';
+import { saveBlob } from '../src/web/save-blob';
 
-vi.mock('file-saver', () => ({
-  saveAs: vi.fn(),
+vi.mock('../src/web/save-blob', () => ({
+  saveBlob: vi.fn(),
 }));
 
-const mockedSaveAs = vi.mocked(saveAs);
+const mockedSaveBlob = vi.mocked(saveBlob);
 
 describe('FileSharerPluginWeb', () => {
   beforeEach(() => {
-    mockedSaveAs.mockClear();
+    mockedSaveBlob.mockClear();
   });
 
   it('downloads decoded data with its filename and content type', async () => {
@@ -24,8 +24,8 @@ describe('FileSharerPluginWeb', () => {
       base64Data: 'dGVzdA==',
     });
 
-    expect(mockedSaveAs).toHaveBeenCalledOnce();
-    const [blob, filename] = mockedSaveAs.mock.calls[0] ?? [];
+    expect(mockedSaveBlob).toHaveBeenCalledOnce();
+    const [blob, filename] = mockedSaveBlob.mock.calls[0] ?? [];
     expect(filename).toBe('test.txt');
     expect(blob).toBeInstanceOf(Blob);
     expect((blob as Blob).type).toBe('text/plain');
@@ -40,6 +40,6 @@ describe('FileSharerPluginWeb', () => {
     const plugin = new FileSharerPluginWeb();
 
     await expect(plugin.share(options as ShareFileOptions)).rejects.toThrow(error);
-    expect(mockedSaveAs).not.toHaveBeenCalled();
+    expect(mockedSaveBlob).not.toHaveBeenCalled();
   });
 });

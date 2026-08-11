@@ -30,6 +30,8 @@ Capacitor 8 is the major-version migration boundary for removing CocoaPods. The 
 
 Vitest replaces Jest and tests live under `test/`. Coverage includes implementation modules and excludes type-only declarations and registration glue. Coverage thresholds must represent meaningful tests rather than commented placeholders.
 
-## FileSaver replacement is deferred
+## Web downloads use browser platform APIs directly
 
-The Capacitor 8 modernization keeps `file-saver` temporarily to keep packaging, native migration, and browser download behaviour independently reviewable. Replacing it with an internal browser download helper is a separate breaking-change issue and does not need legacy-browser compatibility.
+The web implementation creates a Blob URL, clicks a temporary anchor carrying the `download` attribute, removes the anchor, and revokes the URL after a delay. The delay avoids cancelling downloads in Safari before it has consumed the URL.
+
+Capacitor 8 is the compatibility boundary, so the plugin does not reproduce FileSaver's legacy-browser fallbacks. This removes the only production dependency while keeping the existing `FileSharer.share()` API and browser user-activation behavior synchronous.

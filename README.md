@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/maintenance/yes/2025?style=flat-square" />
+    <img src="https://img.shields.io/maintenance/yes/2026?style=flat-square" />
     <a href="https://github.com/moberwasserlechner/capacitor-filesharer/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/actions/workflow/status/moberwasserlechner/capacitor-filesharer/ci.yml?style=flat-square" /></a>
     <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/l/@byteowls/capacitor-filesharer?style=flat-square" /></a>
 <br>
@@ -16,7 +16,7 @@
 
 ## Introduction
 
-Capacitor plugin to share files on Android and iOS using the native share dialog and on Web using the FileSaver lib.
+Capacitor plugin to share files on Android and iOS using the native share dialog and to download files on the Web.
 ## Installation
 
 ```bash
@@ -69,6 +69,10 @@ export class SignupComponent {
 * ERR_PARAM_NO_CONTENT_TYPE ... Content type missing
 * ERR_PARAM_DATA_INVALID ... Base64 data is invalid. See [this comment](https://github.com/moberwasserlechner/capacitor-filesharer/issues/5#issuecomment-502070959) for a possible error.
 * ERR_FILE_CACHING_FAILED ... Caching the file in temp directory on the device failed.
+
+## Platform: Web
+
+Web downloads use modern browser Blob URLs and the anchor `download` attribute. Version 8 does not include legacy-browser download fallbacks.
 
 ## Platform: iOS
 

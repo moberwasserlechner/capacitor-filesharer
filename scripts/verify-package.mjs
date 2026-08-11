@@ -154,6 +154,12 @@ try {
     assert(leaked.length === 0, `unexpected build input published: ${leaked.join(', ')}`);
   });
 
+  check('tarball has no production dependencies', () => {
+    const manifest = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
+    const dependencies = Object.keys(manifest.dependencies ?? {});
+    assert(dependencies.length === 0, `unexpected production dependencies: ${dependencies.join(', ')}`);
+  });
+
   check('tarball ships Android and Swift Package Manager sources', () => {
     const listing = run('tar', ['-tzf', tarball]).split('\n');
     for (const entry of [

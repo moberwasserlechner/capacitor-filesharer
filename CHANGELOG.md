@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Migrated development workflows from npm and Jest to pnpm and Vitest.
 - Modernized TypeScript, Android, and package build tooling.
+- Replaced FileSaver with a dependency-free browser Blob download implementation.
 
 ### Fixed
 - Web validation failures no longer continue into a file download attempt.
@@ -20,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking
 - Capacitor 8 is the new minimum peer dependency.
 - iOS distribution now requires Swift Package Manager; CocoaPods support has been removed.
+- Web downloads now require Blob URLs and anchor download support; legacy FileSaver fallbacks are no longer included.
 
 ## [7.0.0] - 2025-07-22
 

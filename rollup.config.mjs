@@ -1,6 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
 
-import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import dts from 'rollup-plugin-dts';
 
@@ -10,7 +9,7 @@ function bundleRuntime() {
   return {
     input: 'dist/esm/index.js',
     external: ['@capacitor/core'],
-    plugins: [loadInputSourcemaps(), nodeResolve(), commonjs()],
+    plugins: [loadInputSourcemaps(), nodeResolve()],
     output: [
       {
         file: 'dist/index.js',
