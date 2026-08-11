@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Web validation failures no longer continue into a file download attempt.
 - Android now reads the documented `android.chooserTitle` option.
 - Android local paths without Capacitor's internal URL marker no longer crash during parsing.
-- Android rejects filenames that would escape the plugin cache directory.
+- Android and iOS reject filenames that would escape the plugin cache directory.
 
 ### Breaking
 - Capacitor 8 is the new minimum peer dependency.

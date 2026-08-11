@@ -17,12 +17,25 @@ struct FileSharerFileStore {
             throw FileSharerError.invalidData
         }
 
-        let destination = directory.appendingPathComponent(filename)
+        let destination = try safeDestination(for: filename)
         do {
             try data.write(to: destination)
             return destination
         } catch {
             throw FileSharerError.cachingFailed
         }
+    }
+
+    private func safeDestination(for filename: String) throws -> URL {
+        let resolvedDirectory = directory.resolvingSymlinksInPath().standardizedFileURL
+        let destination = resolvedDirectory
+            .appendingPathComponent(filename)
+            .resolvingSymlinksInPath()
+            .standardizedFileURL
+
+        guard destination.deletingLastPathComponent() == resolvedDirectory else {
+            throw FileSharerError.cachingFailed
+        }
+        return destination
     }
 }

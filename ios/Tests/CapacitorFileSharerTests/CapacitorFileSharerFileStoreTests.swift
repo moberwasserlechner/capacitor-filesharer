@@ -44,4 +44,19 @@ final class FileSharerFileStoreTests: XCTestCase {
             XCTAssertEqual(error as? FileSharerError, .cachingFailed)
         }
     }
+
+    func testKeepsCachedFilesInsideConfiguredDirectory() throws {
+        let cacheDirectory = temporaryDirectory.appendingPathComponent("cache", isDirectory: true)
+        try FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        let store = FileSharerFileStore(directory: cacheDirectory)
+
+        XCTAssertThrowsError(try store.cache(filename: "../escaped.txt", base64Data: "aGVsbG8=")) { error in
+            XCTAssertEqual(error as? FileSharerError, .cachingFailed)
+        }
+        XCTAssertFalse(
+            FileManager.default.fileExists(
+                atPath: temporaryDirectory.appendingPathComponent("escaped.txt").path
+            )
+        )
+    }
 }
