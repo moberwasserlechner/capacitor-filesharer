@@ -16,7 +16,7 @@ export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
       throw new Error('ERR_PARAM_NO_CONTENT_TYPE');
     }
 
-    const blob = new Blob([decodeBase64(options.base64Data)], {
+    const blob = new Blob(decodeBase64(options.base64Data), {
       type: options.contentType,
     });
     saveBlob(blob, options.filename);

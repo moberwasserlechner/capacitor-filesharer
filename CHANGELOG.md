@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Swift Package Manager packaging and public iOS CI builds.
+- Swift Package Manager packaging and public iOS CI builds [#60](https://github.com/moberwasserlechner/capacitor-filesharer/issues/60).
 - ESM, CommonJS, and bundled declaration package entry points with consumer verification.
 - Focused iOS tests for plugin metadata, Base64 decoding, and temporary-file failures.
 
@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed the iOS Swift package, library, and test targets to `CapacitorFileSharer`.
 - Reimplemented the Android bridge and file-sharing logic in Kotlin with focused native unit tests.
 - Replaced FileSaver with a dependency-free browser Blob download implementation.
+- Web Base64 downloads are decoded in bounded chunks to reduce peak memory usage for large files [#56](https://github.com/moberwasserlechner/capacitor-filesharer/issues/56).
 
 ### Fixed
 - Web validation failures no longer continue into a file download attempt.
