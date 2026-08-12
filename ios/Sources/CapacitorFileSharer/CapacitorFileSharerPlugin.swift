@@ -10,17 +10,15 @@ public class FileSharerPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "share", returnType: CAPPluginReturnPromise)
     ]
 
-    private static let noFilenameError = "ERR_PARAM_NO_FILENAME"
-    private static let noDataError = "ERR_PARAM_NO_DATA"
     private let fileStore = FileSharerFileStore()
 
     @objc func share(_ call: CAPPluginCall) {
         guard let filename = call.getString("filename") else {
-            call.reject(Self.noFilenameError)
+            call.reject(FileSharerError.noFilename.rawValue)
             return
         }
         guard let base64Data = call.getString("base64Data") else {
-            call.reject(Self.noDataError)
+            call.reject(FileSharerError.noData.rawValue)
             return
         }
         do {

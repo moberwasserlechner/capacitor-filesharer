@@ -1,6 +1,8 @@
 import Foundation
 
 enum FileSharerError: String, Error {
+    case noFilename = "ERR_PARAM_NO_FILENAME"
+    case noData = "ERR_PARAM_NO_DATA"
     case invalidData = "ERR_PARAM_DATA_INVALID"
     case cachingFailed = "ERR_FILE_CACHING_FAILED"
 }
