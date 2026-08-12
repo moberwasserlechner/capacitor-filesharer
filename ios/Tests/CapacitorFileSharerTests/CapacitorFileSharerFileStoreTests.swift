@@ -28,6 +28,108 @@ final class FileSharerFileStoreTests: XCTestCase {
         XCTAssertEqual(try Data(contentsOf: cachedURL), Data("hello".utf8))
     }
 
+    func testCopiesAnAbsolutePathWithoutLoadingItAsData() throws {
+        let source = temporaryDirectory.appendingPathComponent("source.txt")
+        try Data("content".utf8).write(to: source)
+        let cacheDirectory = temporaryDirectory.appendingPathComponent("cache", isDirectory: true)
+        try FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        let store = FileSharerFileStore(directory: cacheDirectory)
+
+        let cachedURL = try store.cache(
+            filename: "shared.txt",
+            base64Data: nil,
+            path: source.path,
+            capacitorOrigin: nil
+        )
+
+        XCTAssertEqual(cachedURL.lastPathComponent, "shared.txt")
+        XCTAssertEqual(try String(contentsOf: cachedURL, encoding: .utf8), "content")
+    }
+
+    func testCopiesAFileURL() throws {
+        let source = temporaryDirectory.appendingPathComponent("source file.txt")
+        try Data("content".utf8).write(to: source)
+        let cacheDirectory = temporaryDirectory.appendingPathComponent("cache", isDirectory: true)
+        try FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        let store = FileSharerFileStore(directory: cacheDirectory)
+
+        let cachedURL = try store.cache(
+            filename: "shared.txt",
+            base64Data: nil,
+            path: source.absoluteString,
+            capacitorOrigin: nil
+        )
+
+        XCTAssertEqual(try String(contentsOf: cachedURL, encoding: .utf8), "content")
+    }
+
+    func testCopiesACapacitorFileURLFromTheConfiguredOrigin() throws {
+        let source = temporaryDirectory.appendingPathComponent("source file.txt")
+        try Data("content".utf8).write(to: source)
+        let cacheDirectory = temporaryDirectory.appendingPathComponent("cache", isDirectory: true)
+        try FileManager.default.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        let store = FileSharerFileStore(directory: cacheDirectory)
+        let encodedPath = source.path.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)!
+        let path = "capacitor://app/_capacitor_file_\(encodedPath)"
+
+        let cachedURL = try store.cache(
+            filename: "shared.txt",
+            base64Data: nil,
+            path: path,
+            capacitorOrigin: URL(string: "capacitor://app")
+        )
+
+        XCTAssertEqual(try String(contentsOf: cachedURL, encoding: .utf8), "content")
+    }
+
+    func testRejectsNetworkAndSpoofedCapacitorURLs() {
+        let store = FileSharerFileStore(directory: temporaryDirectory)
+        for path in [
+            "https://example.test/file",
+            "https://example.test/_capacitor_file_/tmp/file",
+            "blob:https://example.test/id"
+        ] {
+            XCTAssertThrowsError(
+                try store.cache(
+                    filename: "file.txt",
+                    base64Data: nil,
+                    path: path,
+                    capacitorOrigin: URL(string: "capacitor://localhost")
+                )
+            ) { error in
+                XCTAssertEqual(error as? FileSharerError, .invalidPath)
+            }
+        }
+    }
+
+    func testMapsMissingLocalFileToPublicError() {
+        let store = FileSharerFileStore(directory: temporaryDirectory)
+
+        XCTAssertThrowsError(
+            try store.cache(
+                filename: "file.txt",
+                base64Data: nil,
+                path: "/missing/file.txt",
+                capacitorOrigin: nil
+            )
+        ) { error in
+            XCTAssertEqual(error as? FileSharerError, .localFileNotFound)
+        }
+    }
+
+    func testKeepsBase64Precedence() throws {
+        let store = FileSharerFileStore(directory: temporaryDirectory)
+
+        let cachedURL = try store.cache(
+            filename: "file.txt",
+            base64Data: "aGVsbG8=",
+            path: "https://example.test/file",
+            capacitorOrigin: nil
+        )
+
+        XCTAssertEqual(try String(contentsOf: cachedURL, encoding: .utf8), "hello")
+    }
+
     func testRejectsInvalidBase64Data() {
         let store = FileSharerFileStore(directory: temporaryDirectory)
 

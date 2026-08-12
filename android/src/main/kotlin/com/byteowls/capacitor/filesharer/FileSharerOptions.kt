@@ -38,6 +38,7 @@ internal object FileSharerErrors {
     const val NO_DATA = "ERR_PARAM_NO_DATA"
     const val FILE_CACHING_FAILED = "ERR_FILE_CACHING_FAILED"
     const val DATA_INVALID = "ERR_PARAM_DATA_INVALID"
+    const val PATH_INVALID = "ERR_PARAM_PATH_INVALID"
     const val LOCAL_FILE_NOT_FOUND = "ERR_LOCAL_FILE_NOT_FOUND"
     const val USER_CANCELLED = "USER_CANCELLED"
 }

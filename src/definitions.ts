@@ -3,6 +3,7 @@ export const FileSharerErrorCode = {
   NoData: 'ERR_PARAM_NO_DATA',
   NoContentType: 'ERR_PARAM_NO_CONTENT_TYPE',
   InvalidData: 'ERR_PARAM_DATA_INVALID',
+  InvalidPath: 'ERR_PARAM_PATH_INVALID',
   FileCachingFailed: 'ERR_FILE_CACHING_FAILED',
   LocalFileNotFound: 'ERR_LOCAL_FILE_NOT_FOUND',
   UserCancelled: 'USER_CANCELLED',
@@ -26,11 +27,13 @@ export interface ShareFileOptions {
    */
   filename: string;
   /**
-   * The Base64-encoded file data.
+   * The Base64-encoded file data. Takes precedence when `path` is also supplied.
    */
   base64Data?: string;
   /**
-   * A local file path. Currently supported on Android only.
+   * A platform-supported local source. Web accepts `blob:` URLs; Android accepts
+   * raw paths, `file://`, `content://`, and Capacitor file URLs; iOS accepts raw
+   * absolute paths, `file://`, and Capacitor file URLs. Network URLs are rejected.
    */
   path?: string;
   /**

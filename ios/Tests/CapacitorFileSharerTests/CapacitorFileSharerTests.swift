@@ -14,5 +14,7 @@ final class CapacitorFileSharerTests: XCTestCase {
     func testRequiredParameterErrorCodesMatchPublicApi() {
         XCTAssertEqual(FileSharerError.noFilename.rawValue, "ERR_PARAM_NO_FILENAME")
         XCTAssertEqual(FileSharerError.noData.rawValue, "ERR_PARAM_NO_DATA")
+        XCTAssertEqual(FileSharerError.invalidPath.rawValue, "ERR_PARAM_PATH_INVALID")
+        XCTAssertEqual(FileSharerError.localFileNotFound.rawValue, "ERR_LOCAL_FILE_NOT_FOUND")
     }
 }

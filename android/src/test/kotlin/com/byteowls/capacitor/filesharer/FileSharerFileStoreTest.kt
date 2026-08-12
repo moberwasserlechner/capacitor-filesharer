@@ -1,5 +1,7 @@
 package com.byteowls.capacitor.filesharer
 
+import java.io.ByteArrayInputStream
+import java.net.URI
 import java.nio.file.Path
 import org.junit.jupiter.api.Assertions.assertArrayEquals
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -43,11 +45,28 @@ class FileSharerFileStoreTest {
     @Test
     fun `extracts a path from a Capacitor file URL`() {
         val source = temporaryDirectory.resolve("source.txt").toFile().apply { writeText("content") }
-        val store = FileSharerFileStore(temporaryDirectory.resolve("cache").toFile())
+        val store = FileSharerFileStore(
+            temporaryDirectory.resolve("cache").toFile(),
+            sourceOpener = AndroidSourceOpener(null, URI("https://localhost")),
+        )
 
         val cached = store.cache(
             options(base64Data = null, path = "https://localhost/_capacitor_file_${source.absolutePath}"),
         )
+
+        assertEquals("content", cached.readText())
+    }
+
+    @Test
+    fun `decodes a Capacitor file URL path`() {
+        val source = temporaryDirectory.resolve("source file.txt").toFile().apply { writeText("content") }
+        val store = FileSharerFileStore(
+            temporaryDirectory.resolve("cache").toFile(),
+            sourceOpener = AndroidSourceOpener(null, URI("capacitor://app")),
+        )
+        val portablePath = "capacitor://app/_capacitor_file_${source.absolutePath.replace(" ", "%20")}"
+
+        val cached = store.cache(options(base64Data = null, path = portablePath))
 
         assertEquals("content", cached.readText())
     }
@@ -62,6 +81,81 @@ class FileSharerFileStoreTest {
         val cached = store.cache(options(base64Data = null, path = source.absolutePath))
 
         assertEquals("content", cached.readText())
+    }
+
+    @Test
+    fun `copies a source already inside the cache directory`() {
+        val cacheDirectory = temporaryDirectory.resolve("cache").toFile().apply { mkdirs() }
+        val source = cacheDirectory.resolve("source.txt").apply { writeText("content") }
+        val store = FileSharerFileStore(cacheDirectory)
+
+        val cached = store.cache(
+            options(filename = "shared.txt", base64Data = null, path = source.absolutePath),
+        )
+
+        assertEquals("content", cached.readText())
+    }
+
+    @Test
+    fun `rejects a relative raw path`() {
+        val opener = AndroidSourceOpener(null, null)
+
+        assertFailure(FileSharerErrors.PATH_INVALID) { opener.open("relative/file.txt") }
+    }
+
+    @Test
+    fun `copies file URI sources`() {
+        val source = temporaryDirectory.resolve("source file.txt").toFile().apply { writeText("content") }
+        val store = FileSharerFileStore(
+            temporaryDirectory.resolve("cache").toFile(),
+            sourceOpener = AndroidSourceOpener(null, null),
+        )
+
+        val cached = store.cache(options(base64Data = null, path = source.toURI().toString()))
+
+        assertEquals("content", cached.readText())
+    }
+
+    @Test
+    fun `copies source streams in bounded reads`() {
+        val data = ByteArray(100_000) { 7 }
+        val guardedStream = object : ByteArrayInputStream(data) {
+            override fun read(target: ByteArray, offset: Int, length: Int): Int {
+                if (length > 16 * 1024) error("unbounded read")
+                return super.read(target, offset, length)
+            }
+        }
+        val store = FileSharerFileStore(
+            temporaryDirectory.resolve("cache").toFile(),
+            sourceOpener = SourceOpener { guardedStream },
+        )
+
+        val cached = store.cache(options(base64Data = null, path = "content://provider/file"))
+
+        assertArrayEquals(data, cached.readBytes())
+    }
+
+    @Test
+    fun `rejects network and spoofed Capacitor URLs`() {
+        val opener = AndroidSourceOpener(null, URI("https://localhost"))
+
+        assertFailure(FileSharerErrors.PATH_INVALID) { opener.open("https://example.test/file") }
+        assertFailure(FileSharerErrors.PATH_INVALID) {
+            opener.open("https://example.test/_capacitor_file_/tmp/file")
+        }
+    }
+
+    @Test
+    fun `keeps Base64 precedence over an unsupported path`() {
+        val store = FileSharerFileStore(
+            temporaryDirectory.resolve("cache").toFile(),
+            Base64Decoder { byteArrayOf(1) },
+            SourceOpener { error("path must not be opened") },
+        )
+
+        val cached = store.cache(options(base64Data = "encoded", path = "https://example.test"))
+
+        assertArrayEquals(byteArrayOf(1), cached.readBytes())
     }
 
     @Test

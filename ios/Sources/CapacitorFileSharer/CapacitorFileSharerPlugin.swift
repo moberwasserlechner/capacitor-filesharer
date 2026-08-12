@@ -10,19 +10,24 @@ public class FileSharerPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "share", returnType: CAPPluginReturnPromise)
     ]
 
-    private let fileStore = FileSharerFileStore()
-
     @objc func share(_ call: CAPPluginCall) {
         guard let filename = call.getString("filename") else {
             call.reject(FileSharerError.noFilename.rawValue)
             return
         }
-        guard let base64Data = call.getString("base64Data") else {
+        let base64Data = call.getString("base64Data")
+        let path = call.getString("path")
+        guard base64Data != nil || path != nil else {
             call.reject(FileSharerError.noData.rawValue)
             return
         }
         do {
-            let temporaryURL = try fileStore.cache(filename: filename, base64Data: base64Data)
+            let temporaryURL = try FileSharerFileStore().cache(
+                filename: filename,
+                base64Data: base64Data,
+                path: path,
+                capacitorOrigin: bridge?.config.localURL
+            )
 
             DispatchQueue.main.async { [weak self] in
                 guard let self else {
