@@ -1,0 +1,4 @@
+minimumReleaseAge: 2880
+minimumReleaseAgeExclude: null
+onlyBuiltDependencies:
+  - esbuild

@@ -1,0 +1,28 @@
+name: iOS
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Swift Package Manager build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Build iOS package
+        run: xcodebuild -scheme CapacitorFileSharer -destination 'generic/platform=iOS' build
+      - name: Run iOS tests
+        run: |
+          SIMULATOR_ID=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/{print $2; exit}')
+          test -n "$SIMULATOR_ID"
+          xcodebuild -scheme CapacitorFileSharer -destination "platform=iOS Simulator,id=$SIMULATOR_ID" test

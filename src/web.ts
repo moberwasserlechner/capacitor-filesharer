@@ -1,31 +1,35 @@
-import {WebPlugin} from '@capacitor/core';
-import type {FileSharerPlugin, ShareFileOptions} from "./definitions";
-import * as FileSaver from 'file-saver';
-import {WebUtils} from "./web-utils";
+import { WebPlugin } from '@capacitor/core';
+
+import {
+  FileSharerErrorCode,
+  type FileSharerPlugin,
+  type ShareFileOptions,
+} from './definitions';
+import { decodeBase64 } from './web/base64';
+import { saveBlob } from './web/save-blob';
 
 export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
-
-    async share(options: ShareFileOptions): Promise<void> {
-        return new Promise((resolve, reject) => {
-            if (!options.base64Data || options.base64Data.length == 0) {
-                reject(new Error("ERR_PARAM_NO_DATA"));
-            } else if (!options.filename || options.filename.length == 0) {
-                reject(new Error("ERR_PARAM_NO_FILENAME"));
-            } else if (!options.contentType || options.contentType.length == 0) {
-                reject(new Error("ERR_PARAM_NO_CONTENT_TYPE"));
-            }
-
-            let blob = new Blob(
-                [
-                    WebUtils.toByteArray(options.base64Data!)
-                ],
-                {
-                    type: options.contentType
-                }
-            );
-            FileSaver.saveAs(blob, options.filename);
-            resolve();
-        });
+  async share(options: ShareFileOptions): Promise<void> {
+    if (!options.base64Data) {
+      throw new Error(FileSharerErrorCode.NoData);
+    }
+    if (!options.filename) {
+      throw new Error(FileSharerErrorCode.NoFilename);
+    }
+    if (!options.contentType) {
+      throw new Error(FileSharerErrorCode.NoContentType);
     }
 
+    let blobParts: Uint8Array<ArrayBuffer>[];
+    try {
+      blobParts = decodeBase64(options.base64Data);
+    } catch {
+      throw new Error(FileSharerErrorCode.InvalidData);
+    }
+
+    const blob = new Blob(blobParts, {
+      type: options.contentType,
+    });
+    saveBlob(blob, options.filename);
+  }
 }
