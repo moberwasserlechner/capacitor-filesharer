@@ -6,18 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-08-15
+
 ### Added
-- Swift Package Manager packaging and public iOS CI builds [#60](https://github.com/moberwasserlechner/capacitor-filesharer/issues/60).
 - ESM, CommonJS, and bundled declaration package entry points with consumer verification.
-- Focused iOS tests for plugin metadata, Base64 decoding, and temporary-file failures.
+- Focused native tests for Android file handling and iOS plugin metadata, Base64 decoding, and temporary-file failures.
+- Exported stable error-code constants, including consistent invalid Base64 reporting on Web.
 
 ### Changed
-- Migrated development workflows from npm and Jest to pnpm and Vitest.
-- Modernized TypeScript, Android, and package build tooling.
-- Renamed the iOS Swift package, library, and test targets to `CapacitorFileSharer`.
-- Reimplemented the Android bridge and file-sharing logic in Kotlin with focused native unit tests.
-- Replaced FileSaver with a dependency-free browser Blob download implementation.
-- Web Base64 downloads are decoded in bounded chunks to reduce peak memory usage for large files [#56](https://github.com/moberwasserlechner/capacitor-filesharer/issues/56).
+- Migrated development workflows from npm and Jest to pnpm and Vitest, with modernized TypeScript and package build tooling.
+- Local npm publishing now runs full cross-platform verification before upload.
+- Restricted the npm artifact to runtime files and added exact package-content verification.
+- Reimplemented the Android bridge and file-sharing logic in Kotlin.
+- Replaced FileSaver with browser Blob APIs and bounded Base64 decoding to reduce peak memory usage for large files [#56](https://github.com/moberwasserlechner/capacitor-filesharer/issues/56).
 
 ### Fixed
 - Web validation failures no longer continue into a file download attempt.
@@ -27,8 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Breaking
 - Capacitor 8 is the new minimum peer dependency.
-- iOS distribution now requires Swift Package Manager; CocoaPods support has been removed.
-- Web downloads now require Blob URLs and anchor download support; legacy FileSaver fallbacks are no longer included.
+- iOS distribution now uses the renamed `CapacitorFileSharer` Swift package exclusively; CocoaPods support has been removed [#60](https://github.com/moberwasserlechner/capacitor-filesharer/issues/60).
+- Web downloads now require Blob URL and anchor download support; legacy-browser fallbacks are no longer included.
 
 ## [7.0.0] - 2025-07-22
 
@@ -103,7 +104,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Share files using the native share dialog on Android and iOS
 - Download files on the Web
 
-[Unreleased]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/6.0.0...main
+[Unreleased]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/8.0.0...main
+[8.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/7.0.0...8.0.0
+[7.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/6.0.0...7.0.0
 [6.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/5.0.0...6.0.0
 [5.0.0]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/4.0.1...5.0.0
 [4.0.1]: https://github.com/moberwasserlechner/capacitor-filesharer/compare/4.0.0...4.0.1

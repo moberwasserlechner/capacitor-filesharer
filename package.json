@@ -26,7 +26,6 @@
     "dist/plugin.js",
     "dist/plugin.js.map",
     "ios/Sources",
-    "ios/Tests",
     "Package.swift"
   ],
   "scripts": {
@@ -43,7 +42,7 @@
     "verify": "pnpm verify:web && pnpm verify:ios && pnpm verify:android",
     "removePacked": "rimraf byteowls-capacitor-filesharer-*.tgz",
     "publish:locally": "pnpm removePacked && pnpm build && pnpm pack",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm verify"
   },
   "author": "Michael Oberwasserlechner",
   "homepage": "https://github.com/moberwasserlechner/capacitor-filesharer",
@@ -69,16 +68,16 @@
     "@capacitor/core": ">=8.0.0 <9.0.0"
   },
   "devDependencies": {
-    "@capacitor/android": "8.4.1",
-    "@capacitor/core": "8.4.1",
-    "@capacitor/ios": "8.4.1",
+    "@capacitor/android": "8.5.0",
+    "@capacitor/core": "8.5.0",
+    "@capacitor/ios": "8.5.0",
     "@rollup/plugin-node-resolve": "16.0.3",
-    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/coverage-v8": "4.1.10",
     "rimraf": "6.1.3",
-    "rollup": "4.62.3",
-    "rollup-plugin-dts": "6.4.1",
+    "rollup": "4.62.4",
+    "rollup-plugin-dts": "6.5.1",
     "typescript": "6.0.3",
-    "vitest": "4.1.9"
+    "vitest": "4.1.10"
   },
   "capacitor": {
     "ios": {

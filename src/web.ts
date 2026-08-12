@@ -1,22 +1,33 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { FileSharerPlugin, ShareFileOptions } from './definitions';
+import {
+  FileSharerErrorCode,
+  type FileSharerPlugin,
+  type ShareFileOptions,
+} from './definitions';
 import { decodeBase64 } from './web/base64';
 import { saveBlob } from './web/save-blob';
 
 export class FileSharerPluginWeb extends WebPlugin implements FileSharerPlugin {
   async share(options: ShareFileOptions): Promise<void> {
     if (!options.base64Data) {
-      throw new Error('ERR_PARAM_NO_DATA');
+      throw new Error(FileSharerErrorCode.NoData);
     }
     if (!options.filename) {
-      throw new Error('ERR_PARAM_NO_FILENAME');
+      throw new Error(FileSharerErrorCode.NoFilename);
     }
     if (!options.contentType) {
-      throw new Error('ERR_PARAM_NO_CONTENT_TYPE');
+      throw new Error(FileSharerErrorCode.NoContentType);
     }
 
-    const blob = new Blob(decodeBase64(options.base64Data), {
+    let blobParts: Uint8Array<ArrayBuffer>[];
+    try {
+      blobParts = decodeBase64(options.base64Data);
+    } catch {
+      throw new Error(FileSharerErrorCode.InvalidData);
+    }
+
+    const blob = new Blob(blobParts, {
       type: options.contentType,
     });
     saveBlob(blob, options.filename);

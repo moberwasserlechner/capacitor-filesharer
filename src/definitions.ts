@@ -1,36 +1,49 @@
+export const FileSharerErrorCode = {
+  NoFilename: 'ERR_PARAM_NO_FILENAME',
+  NoData: 'ERR_PARAM_NO_DATA',
+  NoContentType: 'ERR_PARAM_NO_CONTENT_TYPE',
+  InvalidData: 'ERR_PARAM_DATA_INVALID',
+  FileCachingFailed: 'ERR_FILE_CACHING_FAILED',
+  LocalFileNotFound: 'ERR_LOCAL_FILE_NOT_FOUND',
+  UserCancelled: 'USER_CANCELLED',
+} as const;
+
+export type FileSharerErrorCode =
+  (typeof FileSharerErrorCode)[keyof typeof FileSharerErrorCode];
+
 export interface FileSharerPlugin {
-    /**
-     * Share a file using the native share dialog on Android and iOS and download the file on Web.
-     * @param {ShareFileOptions} options
-     * @returns {Promise<void>}
-     */
-    share(options: ShareFileOptions): Promise<void>;
+  /**
+   * Share a file using the native share dialog on Android and iOS and download the file on Web.
+   * @param {ShareFileOptions} options
+   * @returns {Promise<void>}
+   */
+  share(options: ShareFileOptions): Promise<void>;
 }
 
 export interface ShareFileOptions {
+  /**
+   * The filename with an extension.
+   */
+  filename: string;
+  /**
+   * The Base64-encoded file data.
+   */
+  base64Data?: string;
+  /**
+   * A local file path. Currently supported on Android only.
+   */
+  path?: string;
+  /**
+   * The media type of the provided data.
+   */
+  contentType: string;
+  /**
+   * Android-specific share options.
+   */
+  android?: {
     /**
-     * The filename with a extension.
+     * Override the default share-sheet title.
      */
-    filename: string;
-    /**
-     * The base64 encoded data or capacitor file url.
-     */
-    base64Data?: string;
-    /**
-     * The local path you can find the file
-     */
-    path?: string;
-    /**
-     * The content type of the provided data.
-     */
-    contentType: string;
-    /**
-     * Custom options for the platform "android"
-     */
-    android?: {
-        /**
-         * Override the default share sheet title
-         */
-        chooserTitle: string;
-    }
+    chooserTitle: string;
+  };
 }

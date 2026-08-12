@@ -28,6 +28,29 @@ const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const tsc = join(repoRoot, 'node_modules', '.bin', 'tsc');
 
 const failures = [];
+const expectedPackageFiles = [
+  'package/LICENSE',
+  'package/Package.swift',
+  'package/README.md',
+  'package/android/build.gradle',
+  'package/android/src/main/AndroidManifest.xml',
+  'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharer.kt',
+  'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerFileStore.kt',
+  'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerOptions.kt',
+  'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerPlugin.kt',
+  'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerProvider.kt',
+  'package/android/src/main/res/xml/sharing_paths.xml',
+  'package/dist/index.cjs',
+  'package/dist/index.cjs.map',
+  'package/dist/index.d.ts',
+  'package/dist/index.js',
+  'package/dist/index.js.map',
+  'package/dist/plugin.js',
+  'package/dist/plugin.js.map',
+  'package/ios/Sources/CapacitorFileSharer/CapacitorFileSharerFileStore.swift',
+  'package/ios/Sources/CapacitorFileSharer/CapacitorFileSharerPlugin.swift',
+  'package/package.json',
+].sort();
 let workspace;
 
 function run(command, args, options = {}) {
@@ -104,10 +127,12 @@ try {
   writeFileSync(
     join(consumer, 'app.ts'),
     [
-      "import { FileSharer } from '@byteowls/capacitor-filesharer';",
-      "import type { ShareFileOptions } from '@byteowls/capacitor-filesharer';",
+      "import { FileSharer, FileSharerErrorCode } from '@byteowls/capacitor-filesharer';",
+      "import type { FileSharerErrorCode as FileSharerErrorCodeValue, ShareFileOptions } from '@byteowls/capacitor-filesharer';",
       '',
       "const options: ShareFileOptions = { filename: 'test.txt', contentType: 'text/plain', base64Data: 'dGVzdA==' };",
+      'const errorCode: FileSharerErrorCodeValue = FileSharerErrorCode.InvalidData;',
+      'void errorCode;',
       '',
       'export async function go(): Promise<void> {',
       '  await FileSharer.share(options);',
@@ -141,17 +166,16 @@ try {
 
   console.log(`verifying ${tarball.split('/').pop()}`);
 
-  check('tarball ships the bundled artifacts', () => {
-    const listing = run('tar', ['-tzf', tarball]).split('\n');
-    for (const entry of ['package/dist/index.js', 'package/dist/index.cjs', 'package/dist/index.d.ts']) {
-      assert(listing.includes(entry), `missing ${entry}`);
-    }
-  });
+  check('tarball contains exactly the intended files', () => {
+    const actualFiles = run('tar', ['-tzf', tarball])
+      .split('\n')
+      .filter((entry) => entry.startsWith('package/') && !entry.endsWith('/'))
+      .sort();
+    const missing = expectedPackageFiles.filter((entry) => !actualFiles.includes(entry));
+    const unexpected = actualFiles.filter((entry) => !expectedPackageFiles.includes(entry));
 
-  check('tarball does not ship the intermediate esm tree', () => {
-    const listing = run('tar', ['-tzf', tarball]).split('\n');
-    const leaked = listing.filter((entry) => entry.startsWith('package/dist/esm/'));
-    assert(leaked.length === 0, `unexpected build input published: ${leaked.join(', ')}`);
+    assert(missing.length === 0, `missing files: ${missing.join(', ')}`);
+    assert(unexpected.length === 0, `unexpected files: ${unexpected.join(', ')}`);
   });
 
   check('tarball has no production dependencies', () => {
@@ -160,31 +184,13 @@ try {
     assert(dependencies.length === 0, `unexpected production dependencies: ${dependencies.join(', ')}`);
   });
 
-  check('tarball ships Android and Swift Package Manager sources', () => {
-    const listing = run('tar', ['-tzf', tarball]).split('\n');
-    for (const entry of [
-      'package/android/src/main/AndroidManifest.xml',
-      'package/android/src/main/kotlin/com/byteowls/capacitor/filesharer/FileSharerPlugin.kt',
-      'package/ios/Sources/CapacitorFileSharer/CapacitorFileSharerFileStore.swift',
-      'package/ios/Sources/CapacitorFileSharer/CapacitorFileSharerPlugin.swift',
-      'package/Package.swift',
-    ]) {
-      assert(listing.includes(entry), `missing ${entry}`);
-    }
-    assert(
-      !listing.some((entry) => entry.startsWith('package/android/src/main/java/')),
-      'unexpected legacy Android Java source',
-    );
-    assert(!listing.some((entry) => entry.endsWith('.podspec')), 'unexpected CocoaPods specification');
-  });
-
   check('node ESM import resolves and exposes the plugin', () => {
     const output = run(
       'node',
       [
         '--input-type=module',
         '-e',
-        "import { FileSharer } from '@byteowls/capacitor-filesharer'; if (typeof FileSharer !== 'object' || FileSharer === null) { throw new Error('FileSharer missing from ESM entry'); } console.log('esm-ok');",
+        "import { FileSharer, FileSharerErrorCode } from '@byteowls/capacitor-filesharer'; if (typeof FileSharer !== 'object' || FileSharer === null) { throw new Error('FileSharer missing from ESM entry'); } if (FileSharerErrorCode.InvalidData !== 'ERR_PARAM_DATA_INVALID') { throw new Error('FileSharerErrorCode missing from ESM entry'); } console.log('esm-ok');",
       ],
       { cwd: consumer },
     );
@@ -197,7 +203,7 @@ try {
       [
         '--input-type=commonjs',
         '-e',
-        "const m = require('@byteowls/capacitor-filesharer'); if (!Object.keys(m).includes('FileSharer')) { throw new Error('CommonJS entry exports: ' + JSON.stringify(Object.keys(m))); } console.log('cjs-ok');",
+        "const m = require('@byteowls/capacitor-filesharer'); if (!Object.keys(m).includes('FileSharer') || m.FileSharerErrorCode?.InvalidData !== 'ERR_PARAM_DATA_INVALID') { throw new Error('CommonJS entry exports: ' + JSON.stringify(Object.keys(m))); } console.log('cjs-ok');",
       ],
       { cwd: consumer },
     );

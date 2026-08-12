@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ShareFileOptions } from '../src/definitions';
+import {
+  FileSharerErrorCode,
+  type ShareFileOptions,
+} from '../src/definitions';
 import { FileSharerPluginWeb } from '../src/web';
 import { saveBlob } from '../src/web/save-blob';
 
@@ -33,9 +36,26 @@ describe('FileSharerPluginWeb', () => {
   });
 
   it.each([
-    [{ filename: 'test.txt', contentType: 'text/plain' }, 'ERR_PARAM_NO_DATA'],
-    [{ base64Data: 'dGVzdA==', contentType: 'text/plain' }, 'ERR_PARAM_NO_FILENAME'],
-    [{ base64Data: 'dGVzdA==', filename: 'test.txt' }, 'ERR_PARAM_NO_CONTENT_TYPE'],
+    [
+      { filename: 'test.txt', contentType: 'text/plain' },
+      FileSharerErrorCode.NoData,
+    ],
+    [
+      { base64Data: 'dGVzdA==', contentType: 'text/plain' },
+      FileSharerErrorCode.NoFilename,
+    ],
+    [
+      { base64Data: 'dGVzdA==', filename: 'test.txt' },
+      FileSharerErrorCode.NoContentType,
+    ],
+    [
+      {
+        base64Data: 'not valid Base64!',
+        filename: 'test.txt',
+        contentType: 'text/plain',
+      },
+      FileSharerErrorCode.InvalidData,
+    ],
   ])('rejects invalid options without starting a download', async (options, error) => {
     const plugin = new FileSharerPluginWeb();
 
