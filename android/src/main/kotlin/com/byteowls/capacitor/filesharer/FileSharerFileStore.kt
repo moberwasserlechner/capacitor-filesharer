@@ -68,7 +68,7 @@ internal class FileSharerFileStore(
         }
 
         val path = requireNotNull(options.path)
-        val resolvedPath = path.substringAfter(CAPACITOR_FILE_MARKER, path)
+        val resolvedPath = CAPACITOR_FILE_URL.matchEntire(path)?.groupValues?.get(1) ?: path
         try {
             return File(resolvedPath).readBytes()
         } catch (error: Exception) {
@@ -77,6 +77,8 @@ internal class FileSharerFileStore(
     }
 
     private companion object {
-        const val CAPACITOR_FILE_MARKER = "_capacitor_file_"
+        val CAPACITOR_FILE_URL = Regex(
+            "^[A-Za-z][A-Za-z0-9+.-]*://[^/]+/_capacitor_file_(.*)$",
+        )
     }
 }

@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Web validation failures no longer continue into a file download attempt.
+- Android raw paths containing `_capacitor_file_` in a filename are no longer mistaken for Capacitor file URLs.
 - Android now reads the documented `android.chooserTitle` option.
 - Android local paths without Capacitor's internal URL marker no longer crash during parsing.
 - Android and iOS reject filenames that would escape the plugin cache directory.

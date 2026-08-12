@@ -53,6 +53,18 @@ class FileSharerFileStoreTest {
     }
 
     @Test
+    fun `does not alter a raw path containing the Capacitor file marker`() {
+        val source = temporaryDirectory.resolve("_capacitor_file_report.txt").toFile().apply {
+            writeText("content")
+        }
+        val store = FileSharerFileStore(temporaryDirectory.resolve("cache").toFile())
+
+        val cached = store.cache(options(base64Data = null, path = source.absolutePath))
+
+        assertEquals("content", cached.readText())
+    }
+
+    @Test
     fun `maps invalid base64 to the public error code`() {
         val store = FileSharerFileStore(
             temporaryDirectory.resolve("cache").toFile(),
