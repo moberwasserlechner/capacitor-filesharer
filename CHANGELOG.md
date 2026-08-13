@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Base64 data now consistently takes precedence when both `base64Data` and `path` are supplied.
 - Android path and URI sources are copied with bounded streams instead of being loaded completely into memory.
 
+### Fixed
+- Android packaging now loads Gradle plugins compatibly when included in a Capacitor host and supplies its own test dependency fallback.
+- The published Swift package no longer references or ships repository tests; native package verification now covers Swift target paths and Android host integration.
+
 ## [8.0.0] - 2026-08-15
 
 ### Added

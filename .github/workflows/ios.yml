@@ -3,7 +3,23 @@ name: iOS
 on:
   push:
     branches: [develop, main]
+    paths-ignore:
+      - '**/*.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/dependabot.yml'
+      - '.editorconfig'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'skills-lock.json'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/dependabot.yml'
+      - '.editorconfig'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'skills-lock.json'
   workflow_dispatch:
 
 permissions:
@@ -22,7 +38,8 @@ jobs:
       - name: Build iOS package
         run: xcodebuild -scheme CapacitorFileSharer -destination 'generic/platform=iOS' build
       - name: Run iOS tests
+        working-directory: ios/Tests
         run: |
           SIMULATOR_ID=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/{print $2; exit}')
           test -n "$SIMULATOR_ID"
-          xcodebuild -scheme CapacitorFileSharer -destination "platform=iOS Simulator,id=$SIMULATOR_ID" test
+          xcodebuild -scheme CapacitorFileSharerTests-Package -destination "platform=iOS Simulator,id=$SIMULATOR_ID" test

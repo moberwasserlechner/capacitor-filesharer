@@ -3,7 +3,23 @@ name: CI
 on:
   push:
     branches: [develop, main]
+    paths-ignore:
+      - '**/*.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/dependabot.yml'
+      - '.editorconfig'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'skills-lock.json'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/dependabot.yml'
+      - '.editorconfig'
+      - '.gitignore'
+      - 'LICENSE'
+      - 'skills-lock.json'
 
 permissions:
   contents: read
@@ -48,6 +64,5 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: gradle
-      - name: Unit tests
-        working-directory: android
-        run: ./gradlew clean build --no-daemon
+      - name: Build, test, and verify Capacitor host integration
+        run: pnpm verify:android

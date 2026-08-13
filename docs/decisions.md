@@ -24,7 +24,7 @@ TypeScript output is intermediate build input. Rollup creates ESM, CommonJS, IIF
 
 ## iOS is distributed through Swift Package Manager only
 
-Capacitor 8 is the major-version migration boundary for removing CocoaPods. The package ships `Package.swift` and sources under `ios/Sources`; the podspec, Podfile, and CocoaPods Xcode project are not retained. Existing consumers must migrate their Capacitor iOS project to Swift Package Manager before upgrading to plugin version 8.
+Capacitor 8 is the major-version migration boundary for removing CocoaPods. The package ships a production-only `Package.swift` and sources under `ios/Sources`; the podspec, Podfile, CocoaPods Xcode project, and tests are not published. XCTest uses a separate repository-only package under `ios/Tests`. Existing consumers must migrate their Capacitor iOS project to Swift Package Manager before upgrading to plugin version 8.
 
 ## Web tests use Vitest
 
@@ -32,7 +32,7 @@ Vitest replaces Jest and tests live under `test/`. Coverage includes implementat
 
 ## Android uses Kotlin with a thin bridge
 
-`FileSharerPlugin` parses the Capacitor call, delegates to a plain Kotlin implementation, and maps activity results back to the call. Option parsing, cache-file preparation, source loading, and intent construction are separated so file and validation behavior can be tested without mocking the Capacitor bridge.
+`FileSharerPlugin` parses the Capacitor call, delegates to a plain Kotlin implementation, and maps activity results back to the call. Option parsing, cache-file preparation, source loading, and intent construction are separated so file and validation behavior can be tested without mocking the Capacitor bridge. Verification builds Android both standalone and from the packed npm artifact as a subproject of a Capacitor-style host, covering the publish allowlist, plugin classpath, and property integration.
 
 Cached filenames must resolve directly beneath the plugin-owned cache directory. Android grants recipients access through a `FileProvider` URI and `ClipData`; raw filesystem paths are never placed in the share intent.
 
