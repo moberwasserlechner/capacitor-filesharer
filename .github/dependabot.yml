@@ -14,28 +14,6 @@ updates:
         patterns:
           - '*'
 
-  - package-ecosystem: gradle
-    directory: /android
-    schedule:
-      interval: weekly
-    ignore:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-major
-    groups:
-      gradle-dependencies:
-        patterns:
-          - '*'
-
-  - package-ecosystem: swift
-    directory: /
-    schedule:
-      interval: weekly
-    ignore:
-      - dependency-name: '*'
-        update-types:
-          - version-update:semver-major
-
   - package-ecosystem: github-actions
     directory: /
     schedule:
