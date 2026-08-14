@@ -21,11 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
             path: "ios/Sources/CapacitorFileSharer"
-        ),
-        .testTarget(
-            name: "CapacitorFileSharerTests",
-            dependencies: ["CapacitorFileSharer"],
-            path: "ios/Tests/CapacitorFileSharerTests"
         )
     ]
 )

@@ -7,11 +7,21 @@ import android.content.Intent
 import android.content.pm.LabeledIntent
 import androidx.core.content.FileProvider
 import java.io.File
+import java.net.URI
 
 internal class FileSharer(
     private val context: Context,
+    capacitorOrigin: String,
     private val fileStore: FileSharerFileStore = FileSharerFileStore(
         File(context.filesDir, CACHE_DIRECTORY_NAME),
+        sourceOpener = AndroidSourceOpener(
+            context.contentResolver,
+            try {
+                URI(capacitorOrigin)
+            } catch (_: Exception) {
+                null
+            },
+        ),
     ),
 ) {
     fun createChooserIntent(options: FileSharerOptions): Intent {

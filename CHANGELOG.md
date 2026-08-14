@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Cross-platform, memory-safe local source sharing through `path`: Web accepts caller-owned Blob URLs, Android accepts filesystem and content URIs, and iOS accepts filesystem URLs; Android and iOS also accept Capacitor file URLs from the configured WebView origin [#66](https://github.com/moberwasserlechner/capacitor-filesharer/issues/66).
+- Exported `ERR_PARAM_PATH_INVALID` for malformed and unsupported path or URI sources.
+
+### Changed
+- Base64 data now consistently takes precedence when both `base64Data` and `path` are supplied.
+- Android path and URI sources are copied with bounded streams instead of being loaded completely into memory.
+
+### Fixed
+- Android packaging now loads Gradle plugins compatibly when included in a Capacitor host and supplies its own test dependency fallback.
+- The published Swift package no longer references or ships repository tests; native package verification now covers Swift target paths and Android host integration.
+
 ## [8.0.0] - 2026-08-15
 
 ### Added

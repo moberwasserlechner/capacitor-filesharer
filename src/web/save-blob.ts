@@ -7,10 +7,19 @@ const OBJECT_URL_LIFETIME_MS = 40_000;
  * after the temporary anchor has been clicked.
  */
 export function saveBlob(blob: Blob, filename: string): void {
-  const anchor = document.createElement('a');
   const objectUrl = URL.createObjectURL(blob);
 
-  anchor.href = objectUrl;
+  try {
+    saveUrl(objectUrl, filename);
+  } finally {
+    setTimeout(() => URL.revokeObjectURL(objectUrl), OBJECT_URL_LIFETIME_MS);
+  }
+}
+
+/** Starts a download without taking ownership of the supplied URL. */
+export function saveUrl(url: string, filename: string): void {
+  const anchor = document.createElement('a');
+  anchor.href = url;
   anchor.download = filename;
   anchor.rel = 'noopener';
   anchor.style.display = 'none';
@@ -20,6 +29,5 @@ export function saveBlob(blob: Blob, filename: string): void {
     anchor.click();
   } finally {
     anchor.remove();
-    setTimeout(() => URL.revokeObjectURL(objectUrl), OBJECT_URL_LIFETIME_MS);
   }
 }

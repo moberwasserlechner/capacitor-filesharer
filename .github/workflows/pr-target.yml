@@ -1,0 +1,22 @@
+name: Pull request target
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate target
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require develop as the pull request target
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          if [[ "$BASE_BRANCH" != "develop" ]]; then
+            echo "Pull requests must target develop. Releases are pushed directly to main through the maintainers' Git Flow process."
+            exit 1
+          fi

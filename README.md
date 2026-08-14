@@ -1,17 +1,16 @@
 <p align="center"><br><img src="https://user-images.githubusercontent.com/236501/85893648-1c92e880-b7a8-11ea-926d-95355b8175c7.png" width="128" height="128" /></p>
-<h3 align="center">File Sharing</h3>
+<h3 align="center">Capacitor File Sharing</h3>
 <p align="center"><strong><code>@byteowls/capacitor-filesharer</code></strong></p>
-<p align="center">
-    Capacitor File Sharing plugin
-</p>
+<p align="center">Capacitor File Sharing plugin</p>
 
 <p align="center">
-    <img src="https://img.shields.io/maintenance/yes/2026?style=flat-square" />
-    <a href="https://github.com/moberwasserlechner/capacitor-filesharer/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/actions/workflow/status/moberwasserlechner/capacitor-filesharer/ci.yml?style=flat-square" /></a>
-    <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/l/@byteowls/capacitor-filesharer?style=flat-square" /></a>
-<br>
-  <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/dw/@byteowls/capacitor-filesharer?style=flat-square" /></a>
-  <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/v/@byteowls/capacitor-filesharer?style=flat-square" /></a>
+    <img src="https://img.shields.io/maintenance/yes/2026?style=flat-square" alt="Maintained in 2026" />
+    <a href="https://github.com/moberwasserlechner/capacitor-filesharer/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/actions/workflow/status/moberwasserlechner/capacitor-filesharer/ci.yml?style=flat-square&label=Web%20/%20Android" alt="CI status" /></a>
+    <a href="https://github.com/moberwasserlechner/capacitor-filesharer/actions/workflows/ios.yml"><img src="https://img.shields.io/github/actions/workflow/status/moberwasserlechner/capacitor-filesharer/ios.yml?style=flat-square&label=iOS" alt="iOS build status" /></a>
+    <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/l/@byteowls/capacitor-filesharer?style=flat-square" alt="npm license" /></a>
+    <br>
+    <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/dw/@byteowls/capacitor-filesharer?style=flat-square" alt="npm weekly downloads" /></a>
+    <a href="https://www.npmjs.com/package/@byteowls/capacitor-filesharer"><img src="https://img.shields.io/npm/v/@byteowls/capacitor-filesharer?style=flat-square" alt="npm version" /></a>
 </p>
 
 ## Introduction
@@ -61,18 +60,23 @@ export async function shareReport(base64Data: string): Promise<void> {
 }
 ```
 
-Provide either `base64Data` or a platform-supported `path`. If Android receives both, `base64Data` takes precedence. Web and iOS currently require `base64Data`.
+Provide either `base64Data` or a platform-supported `path`. If both are supplied, `base64Data` takes precedence on every platform.
 
 ### Input support
 
 | Input | Web | Android | iOS |
 | --- | --- | --- | --- |
 | Base64 data | Supported | Supported | Supported |
-| Raw local path | Not supported | Supported when app-accessible | Not supported |
-| Capacitor `_capacitor_file_` URL | Not supported | Supported | Not supported |
-| `file://` or `content://` URI | Not supported | Not supported | Not supported |
+| Caller-created `blob:` URL | Supported | Not supported | Not supported |
+| Raw absolute local path | Not supported | Supported when app-accessible | Supported when app-accessible |
+| Local `file://` URL | Not supported | Supported | Supported |
+| `content://` URI | Not supported | Supported when app-accessible | Not supported |
+| Capacitor `_capacitor_file_` URL | Not supported | Supported for the configured WebView origin | Supported for the configured WebView origin |
+| `http:` or `https:` network URL | Not supported | Not supported | Not supported |
 
-Base64 crosses the JavaScript/native bridge and requires additional encoded and decoded memory. Keep payload sizes practical. Android paths avoid Base64 bridge overhead, but the current implementation still reads the complete source into memory while caching it. Cross-platform streaming path and URI support is tracked in [#66](https://github.com/moberwasserlechner/capacitor-filesharer/issues/66).
+Base64 crosses the JavaScript/native bridge and requires additional encoded and decoded memory. Prefer a platform-supported `path` for large files. Native path and URI sources are copied to plugin-owned temporary storage using streaming or platform file-copy APIs without first loading the complete file into memory.
+
+Treat native paths and URIs as trusted application input. The plugin can share files that are already readable by the application, but it does not grant the application access to otherwise inaccessible sources.
 
 ### Errors
 
@@ -84,8 +88,9 @@ Errors expose one of the exported `FileSharerErrorCode` values through `Error.me
 | `NoData` | `ERR_PARAM_NO_DATA` | Web, Android, iOS |
 | `NoContentType` | `ERR_PARAM_NO_CONTENT_TYPE` | Web, Android |
 | `InvalidData` | `ERR_PARAM_DATA_INVALID` | Web, Android, iOS |
+| `InvalidPath` | `ERR_PARAM_PATH_INVALID` | Web, Android, iOS |
 | `FileCachingFailed` | `ERR_FILE_CACHING_FAILED` | Android, iOS |
-| `LocalFileNotFound` | `ERR_LOCAL_FILE_NOT_FOUND` | Android |
+| `LocalFileNotFound` | `ERR_LOCAL_FILE_NOT_FOUND` | Android, iOS |
 | `UserCancelled` | `USER_CANCELLED` | Android |
 
 ### Completion behavior
@@ -98,15 +103,41 @@ Errors expose one of the exported `FileSharerErrorCode` values through `Error.me
 
 ## Platform: Web
 
-Web downloads use Blob URLs and the anchor `download` attribute. Version 8 does not include legacy-browser download fallbacks.
+Web downloads use Blob URLs and the anchor `download` attribute. Version 8 does not include legacy-browser download fallbacks. For a large browser file, create an object URL and retain ownership of its lifecycle:
+
+```typescript
+const url = URL.createObjectURL(blob);
+try {
+  await FileSharer.share({
+    filename: 'report.pdf',
+    contentType: 'application/pdf',
+    path: url,
+  });
+} finally {
+  // Keep the URL alive long enough for browsers such as Safari to consume it.
+  setTimeout(() => URL.revokeObjectURL(url), 40_000);
+}
+```
+
+Web rejects network URLs, local filesystem paths, and URL schemes other than `blob:`. The promise resolves after the browser download is started; the caller must revoke its URL later, after the browser has had time to consume it.
 
 ## Platform: iOS
 
 Version 8 is distributed exclusively through Swift Package Manager. Applications upgrading from plugin 7 must migrate their Capacitor iOS project from CocoaPods to Swift Package Manager before installing this release.
 
+An accessible absolute path, local `file://` URL, or Capacitor file URL can be shared without Base64:
+
+```typescript
+await FileSharer.share({
+  filename: 'report.pdf',
+  contentType: 'application/pdf',
+  path: 'file:///private/var/mobile/Containers/Data/Application/.../report.pdf',
+});
+```
+
 ## Platform: Android
 
-Android can share an app-accessible local path without first converting the file to Base64:
+Android can share an app-accessible raw path, local `file://` URL, `content://` URI, or Capacitor file URL without first converting the file to Base64:
 
 ```typescript
 await FileSharer.share({

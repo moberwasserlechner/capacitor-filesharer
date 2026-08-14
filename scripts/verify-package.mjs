@@ -18,7 +18,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -182,6 +182,16 @@ try {
     const manifest = JSON.parse(readFileSync(join(installed, 'package.json'), 'utf8'));
     const dependencies = Object.keys(manifest.dependencies ?? {});
     assert(dependencies.length === 0, `unexpected production dependencies: ${dependencies.join(', ')}`);
+  });
+
+  check('Swift target paths exist and tests are not published', () => {
+    const swiftManifest = readFileSync(join(installed, 'Package.swift'), 'utf8');
+    const targetPaths = [...swiftManifest.matchAll(/path:\s*"([^"]+)"/g)].map((match) => match[1]);
+    for (const targetPath of targetPaths) {
+      assert(existsSync(join(installed, targetPath)), `missing Swift target path: ${targetPath}`);
+    }
+    const publishedTests = expectedPackageFiles.filter((entry) => entry.includes('/Tests/'));
+    assert(publishedTests.length === 0, `unexpected published tests: ${publishedTests.join(', ')}`);
   });
 
   check('node ESM import resolves and exposes the plugin', () => {

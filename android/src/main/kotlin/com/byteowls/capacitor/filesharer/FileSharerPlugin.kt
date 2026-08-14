@@ -14,7 +14,7 @@ class FileSharerPlugin : Plugin() {
 
     override fun load() {
         super.load()
-        implementation = FileSharer(context)
+        implementation = FileSharer(context, bridge.localUrl)
     }
 
     @PluginMethod

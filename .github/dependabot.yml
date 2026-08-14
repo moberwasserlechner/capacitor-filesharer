@@ -5,29 +5,23 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
     groups:
       pnpm-dependencies:
         patterns:
           - '*'
 
-  - package-ecosystem: gradle
-    directory: /android
-    schedule:
-      interval: weekly
-    groups:
-      gradle-dependencies:
-        patterns:
-          - '*'
-
-  - package-ecosystem: swift
-    directory: /
-    schedule:
-      interval: weekly
-
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - version-update:semver-major
     groups:
       github-actions:
         patterns:

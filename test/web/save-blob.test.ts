@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { saveBlob } from '../../src/web/save-blob';
+import { saveBlob, saveUrl } from '../../src/web/save-blob';
 
 describe('saveBlob', () => {
   const click = vi.fn();
@@ -60,6 +60,17 @@ describe('saveBlob', () => {
 
     vi.advanceTimersByTime(40_000);
     expect(revokeObjectURL).toHaveBeenCalledWith('blob:test');
+  });
+
+  it('downloads a caller-owned URL without creating or revoking it', () => {
+    saveUrl('blob:https://example.test/id', 'test.txt');
+
+    expect(anchor.href).toBe('blob:https://example.test/id');
+    expect(click).toHaveBeenCalledOnce();
+    expect(remove).toHaveBeenCalledOnce();
+    expect(createObjectURL).not.toHaveBeenCalled();
+    vi.runAllTimers();
+    expect(revokeObjectURL).not.toHaveBeenCalled();
   });
 
   it('still removes the anchor and schedules cleanup when clicking fails', () => {
